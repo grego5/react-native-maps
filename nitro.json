@@ -1,0 +1,26 @@
+{
+  "cxxNamespace": [
+    "mapssession"
+  ],
+  "ios": {
+    "iosModuleName": "ReactNativeMaps"
+  },
+  "android": {
+    "androidNamespace": [
+      "mapssession"
+    ],
+    "androidCxxLibName": "ReactNativeMaps"
+  },
+  "autolinking": {
+    "MapSurface": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridMapSurface"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridMapSurface"
+      }
+    }
+  }
+}

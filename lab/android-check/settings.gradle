@@ -1,0 +1,9 @@
+pluginManagement {
+  includeBuild('../../node_modules/@react-native/gradle-plugin')
+  repositories { google(); mavenCentral(); gradlePluginPortal() }
+}
+rootProject.name = 'ReactNativeMapsAndroidCheck'
+include ':react-native-maps', ':react-native-nitro-modules'
+project(':react-native-maps').projectDir = file('../../android')
+project(':react-native-nitro-modules').projectDir = file('../../node_modules/react-native-nitro-modules/android')
+includeBuild('../../node_modules/@react-native/gradle-plugin')

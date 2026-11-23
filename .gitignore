@@ -1,0 +1,8 @@
+node_modules/
+build/
+*.exe
+/android/.cxx/
+/android/build/
+/android/.gradle/
+/lab/android-check/.gradle/
+/lab/android-check/.kotlin/

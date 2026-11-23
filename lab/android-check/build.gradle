@@ -1,0 +1,30 @@
+buildscript {
+  repositories { google(); mavenCentral(); gradlePluginPortal() }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:9.3.1'
+    classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.10'
+    classpath 'com.facebook.react:react-native-gradle-plugin'
+  }
+}
+ext {
+  compileSdkVersion = 37
+  minSdkVersion = 24
+  targetSdkVersion = 36
+  ndkVersion = '29.0.14206865'
+}
+allprojects {
+  repositories { google(); mavenCentral() }
+  configurations.configureEach {
+    resolutionStrategy.force 'com.facebook.react:react-android:0.88.1'
+    resolutionStrategy.dependencySubstitution {
+      substitute(module('com.facebook.react:react-native')).using(module('com.facebook.react:react-android:0.88.1'))
+    }
+  }
+}
+
+
+project(':react-native-nitro-modules') {
+  tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+  }
+}

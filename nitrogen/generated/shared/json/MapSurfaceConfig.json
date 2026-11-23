@@ -1,0 +1,16 @@
+{
+  "uiViewClassName": "MapSurface",
+  "supportsRawText": false,
+  "bubblingEventTypes": {},
+  "directEventTypes": {},
+  "validAttributes": {
+    "features": true,
+    "provider": true,
+    "onReady": true,
+    "onRendered": true,
+    "onTap": true,
+    "pinDragEnabled": true,
+    "onDrag": true,
+    "hybridRef": true
+  }
+}

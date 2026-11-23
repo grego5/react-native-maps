@@ -1,0 +1,40 @@
+{
+  "name": "@grego5/react-native-maps",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "nitrogen": "nitrogen src",
+    "typecheck": "tsc --noEmit --skipLibCheck --strict --target es2022 --module nodenext --jsx react-jsx --resolveJsonModule src/index.tsx"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "nitrogen": "0.37.2",
+    "react-native-nitro-modules": "0.37.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
+  },
+  "peerDependencies": {
+    "react-native-nitro-modules": "^0.37.2",
+    "react": ">=19.0.0",
+    "react-native": ">=0.88.0",
+    "@expo/config-plugins": ">=58.0.0"
+  },
+  "main": "src/index.tsx",
+  "types": "src/index.tsx",
+  "files": [
+    "android/build.gradle",
+    "android/CMakeLists.txt",
+    "android/src",
+    "nitrogen/generated",
+    "src",
+    "react-native.config.js",
+    "ios",
+    "ReactNativeMaps.podspec",
+    "LICENSE",
+    "app.plugin.js"
+  ],
+  "peerDependenciesMeta": {
+    "@expo/config-plugins": {
+      "optional": true
+    }
+  }
+}

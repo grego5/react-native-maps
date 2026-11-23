@@ -1,0 +1,14 @@
+{
+  "build": {
+    "preview": {
+      "distribution": "internal",
+      "environment": "preview",
+      "env": {
+        "NPM_CONFIG_INSTALL_LINKS": "true"
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    }
+  }
+}

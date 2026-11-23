@@ -1,0 +1,28 @@
+{
+  "name": "react-native-maps-example",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "typecheck": "tsc --noEmit"
+  },
+  "overrides": {
+    "minimatch": "11.0.8"
+  },
+  "dependencies": {
+    "expo": "~58.0.26",
+    "react": "19.3.0",
+    "react-native": "0.88.1",
+    "react-native-nitro-modules": "0.37.2",
+    "react-native-maps": "file:..",
+    "expo-constants": "~58.0.16"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
+  }
+}
+
