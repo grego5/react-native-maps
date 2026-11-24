@@ -1,7 +1,11 @@
 package com.margelo.nitro.mapssession
 
+import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.DashPathEffect
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.PointF
 import android.os.Handler
 import android.os.Looper
@@ -30,18 +34,48 @@ internal class SurfaceDrag(
       if (value) cancel()
     }
 
-  private data class Drag(val route: MapRoute?, var point: PointF)
+  /** Styles a standalone pin drag; route drags use their route's `drag.preview`. */
+  var pinPreview: DragPreview? = null
+    set(value) {
+      field = value
+      loadPreviewImages()
+    }
+
+  /** The preview chosen at drag start, with paints built once per drag. */
+  private class Drag(
+    val route: MapRoute?,
+    /** Every draggable route under the press, nearest first, fixed for the whole drag. */
+    val routeIds: Array<String>,
+    var point: PointF,
+    val preview: DragPreview?,
+    density: Float,
+  ) {
+    val stroke = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+      style = Paint.Style.STROKE
+      color = parseHexColor(preview?.strokeColor) ?: DEFAULT_COLOR
+      strokeWidth = density * (preview?.strokeWidth ?: 3.0).toFloat()
+      strokeCap = Paint.Cap.ROUND
+      preview?.dashPattern?.let { lengths ->
+        pathEffect = DashPathEffect(FloatArray(lengths.size) { (lengths[it] * density).toFloat() }, 0f)
+      }
+    }
+    val fill = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = stroke.color }
+    val path = Path()
+  }
   private val main = Handler(Looper.getMainLooper())
   private val density = host.resources.displayMetrics.density
   private val slop = ViewConfiguration.get(host.context).scaledTouchSlop
-  private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = 0xFF007AFF.toInt()
-    strokeWidth = density * 3
-    strokeCap = Paint.Cap.ROUND
-  }
+  /** Preview images, loaded when previews change so a drag never waits on I/O. Null while loading or failed. */
+  private var previewImages: Map<MarkerImage, Bitmap?> = emptyMap()
   private var routes: Map<String, MapRoute> = emptyMap()
+  /** Markers in input order, for drop and query hits. */
+  private var markers: List<MapMarker> = emptyList()
+  /** Display points around the drop point searched for markers on END. */
+  var dropRadius = 0.0
   private var active: Drag? = null
   private var captured = false
+  /** True while a drag owns the current touch. */
+  val isCapturing: Boolean get() = captured
   private var downTime = 0L
   private var origin = PointF()
   private val start = Runnable { begin() }
@@ -89,9 +123,11 @@ internal class SurfaceDrag(
 
   private fun begin() {
     if (cameraMoving) return
-    val route = routeIdsAt(origin, forDrag = true).firstOrNull()?.let(routes::get)
+    val routeIds = routeIdsAt(origin, forDrag = true)
+    val route = routeIds.firstOrNull()?.let(routes::get)
     if (route == null && !pinEnabled) return
-    val drag = Drag(route, origin.lifted())
+    val preview = if (route != null) route.drag?.preview else pinPreview
+    val drag = Drag(route, routeIds, origin.lifted(), preview, density)
     if (unproject(drag.point) == null) return
     val event = MotionEvent.obtain(
       downTime, SystemClock.uptimeMillis(), MotionEvent.ACTION_CANCEL, origin.x, origin.y, 0,
@@ -111,8 +147,31 @@ internal class SurfaceDrag(
 
   fun updateRoutes(routes: Map<String, MapRoute>) {
     this.routes = routes
+    loadPreviewImages()
     val route = active?.route ?: return
     if (!route.drag?.anchors.contentEquals(routes[route.id]?.drag?.anchors)) cancel()
+  }
+
+  fun updateMarkers(markers: List<MapMarker>) {
+    this.markers = markers
+  }
+
+  /** Markers and routes near `point` in display points, nearest first. */
+  fun queryFeatures(point: MapPoint, radius: Double): MapFeatureHits {
+    require(radius.isFinite() && radius >= 0) { "Radius must be finite and nonnegative" }
+    val pixel = PointF((point.x * density).toFloat(), (point.y * density).toFloat())
+    return MapFeatureHits(markersNear(pixel, radius), routeIdsAt(pixel, minRadius = radius))
+  }
+
+  /** Markers whose coordinate projects within `radius` points of `point`, nearest first, then input order. */
+  private fun markersNear(point: PointF, radius: Double): Array<String> {
+    if (radius <= 0) return emptyArray()
+    val limit = radius * density
+    return markers.mapIndexedNotNull { index, marker ->
+      val projected = project(marker.coordinate) ?: return@mapIndexedNotNull null
+      val distance = hypot((projected.x - point.x).toDouble(), (projected.y - point.y).toDouble())
+      if (distance <= limit) Triple(marker.id, distance, index) else null
+    }.sortedWith(compareBy({ it.second }, { it.third })).map { it.first }.toTypedArray()
   }
 
   fun mapTapped(coordinate: Coordinate, markerId: String?) {
@@ -122,11 +181,12 @@ internal class SurfaceDrag(
     emitTap(MapTap(coordinate, point.toMapPoint(), markerId, ids))
   }
 
-  private fun routeIdsAt(point: PointF, forDrag: Boolean = false): Array<String> {
+  /** Routes within the larger of `minRadius` and their slop: `hitSlop`, or 20 points for drags. */
+  private fun routeIdsAt(point: PointF, forDrag: Boolean = false, minRadius: Double = 0.0): Array<String> {
     val candidates = routes.values.mapNotNull { route ->
       if (forDrag && route.drag == null) return@mapNotNull null
-      val radius = route.hitSlop ?: if (forDrag) 20.0 else return@mapNotNull null
-      if (radius == 0.0) return@mapNotNull null
+      val radius = maxOf(route.hitSlop ?: if (forDrag) 20.0 else 0.0, minRadius)
+      if (radius <= 0.0) return@mapNotNull null
       val projected = FloatArray(route.coordinates.size * 2)
       for ((index, coordinate) in route.coordinates.withIndex()) {
         val pixel = project(coordinate) ?: return@mapNotNull null
@@ -151,21 +211,68 @@ internal class SurfaceDrag(
     dispatch(drag, phase)
   }
 
+  /** Requests every image the current previews use and drops the ones no longer used. */
+  private fun loadPreviewImages() {
+    val wanted = routes.values.mapNotNullTo(HashSet()) { it.drag?.preview?.image }
+    pinPreview?.image?.let(wanted::add)
+    if (wanted == previewImages.keys) return
+    previewImages = wanted.associateWith { previewImages[it] }
+    for (image in wanted) {
+      if (previewImages[image] != null) continue
+      MarkerImages.load(host.context, image) { result ->
+        val bitmap = result.getOrNull() ?: return@load
+        if (image in previewImages) {
+          previewImages = previewImages + (image to bitmap)
+          if (active != null) host.invalidate()
+        }
+      }
+    }
+  }
+
   fun draw(canvas: Canvas) {
     val drag = active ?: return
     val point = drag.point
-    drag.route?.drag?.anchors?.forEach { anchor ->
-      project(anchor)?.let { canvas.drawLine(it.x, it.y, point.x, point.y, paint) }
+    val anchors = drag.route?.drag?.anchors
+    if (!anchors.isNullOrEmpty()) {
+      drag.path.rewind()
+      for (anchor in anchors) {
+        val start = project(anchor) ?: continue
+        drag.path.moveTo(start.x, start.y)
+        drag.path.lineTo(point.x, point.y)
+      }
+      canvas.drawPath(drag.path, drag.stroke)
     }
-    canvas.drawCircle(point.x, point.y, density * 6, paint)
+    val image = drag.preview?.image
+    val bitmap = image?.let { previewImages[it] }
+    if (bitmap == null) {
+      canvas.drawCircle(point.x, point.y, density * 6, drag.fill)
+    } else {
+      val anchor = drag.preview?.anchor
+      val left = point.x - (anchor?.x ?: 0.5).toFloat() * bitmap.width
+      val top = point.y - (anchor?.y ?: 1.0).toFloat() * bitmap.height
+      canvas.drawBitmap(bitmap, left, top, null)
+    }
   }
 
   private fun dispatch(drag: Drag, phase: MapDragPhase) {
     val coordinate = unproject(drag.point) ?: return
-    emitDrag(MapDragEvent(phase, coordinate, drag.point.toMapPoint(), drag.route?.id))
+    val markerIds = if (phase == MapDragPhase.END) markersNear(drag.point, dropRadius) else emptyArray()
+    emitDrag(MapDragEvent(phase, coordinate, drag.point.toMapPoint(), drag.route?.id, drag.routeIds, markerIds))
   }
 
   private fun PointF.toMapPoint() = MapPoint(x.toDouble() / density, y.toDouble() / density)
 
   private fun PointF.lifted() = PointF(x, y - density * 32)
+
+  private companion object {
+    const val DEFAULT_COLOR = 0xFF007AFF.toInt()
+  }
+}
+
+/** `#RRGGBB` or `#RRGGBBAA` to an Android color, or null when absent. */
+internal fun parseHexColor(hex: String?): Int? {
+  if (hex == null) return null
+  val rgb = if (hex.length == 9) hex.substring(1, 7) else hex.substring(1)
+  val alpha = if (hex.length == 9) hex.substring(7) else "FF"
+  return Color.parseColor("#$alpha$rgb")
 }

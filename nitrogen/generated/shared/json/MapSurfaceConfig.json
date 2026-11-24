@@ -4,12 +4,20 @@
   "bubblingEventTypes": {},
   "directEventTypes": {},
   "validAttributes": {
-    "features": true,
+    "markers": true,
+    "routes": true,
     "provider": true,
+    "options": true,
+    "initialCamera": true,
+    "initialFit": true,
+    "onCameraMove": true,
     "onReady": true,
     "onRendered": true,
     "onTap": true,
+    "onPoiTap": true,
     "pinDragEnabled": true,
+    "pinDragPreview": true,
+    "dropRadius": true,
     "onDrag": true,
     "hybridRef": true
   }

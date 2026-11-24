@@ -14,6 +14,14 @@
 
 namespace margelo::nitro::mapssession::bridge::swift {
 
+  // pragma MARK: std::function<void(const MapCameraEvent& /* event */)>
+  Func_void_MapCameraEvent create_Func_void_MapCameraEvent(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = ReactNativeMaps::Func_void_MapCameraEvent::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const MapCameraEvent& event) mutable -> void {
+      swiftClosure.call(event);
+    };
+  }
+  
   // pragma MARK: std::function<void()>
   Func_void create_Func_void(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = ReactNativeMaps::Func_void::fromUnsafe(swiftClosureWrapper);
@@ -26,6 +34,14 @@ namespace margelo::nitro::mapssession::bridge::swift {
   Func_void_MapTap create_Func_void_MapTap(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = ReactNativeMaps::Func_void_MapTap::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](const MapTap& event) mutable -> void {
+      swiftClosure.call(event);
+    };
+  }
+  
+  // pragma MARK: std::function<void(const MapPoiTap& /* event */)>
+  Func_void_MapPoiTap create_Func_void_MapPoiTap(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = ReactNativeMaps::Func_void_MapPoiTap::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const MapPoiTap& event) mutable -> void {
       swiftClosure.call(event);
     };
   }
@@ -43,6 +59,22 @@ namespace margelo::nitro::mapssession::bridge::swift {
     auto swiftClosure = ReactNativeMaps::Func_void_std__exception_ptr::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](const std::exception_ptr& error) mutable -> void {
       swiftClosure.call(error);
+    };
+  }
+  
+  // pragma MARK: std::function<void(const MapCamera& /* result */)>
+  Func_void_MapCamera create_Func_void_MapCamera(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = ReactNativeMaps::Func_void_MapCamera::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const MapCamera& result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
+  // pragma MARK: std::function<void(CameraReveal /* result */)>
+  Func_void_CameraReveal create_Func_void_CameraReveal(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = ReactNativeMaps::Func_void_CameraReveal::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](CameraReveal result) mutable -> void {
+      swiftClosure.call(static_cast<int>(result));
     };
   }
   
@@ -66,6 +98,14 @@ namespace margelo::nitro::mapssession::bridge::swift {
   Func_void_std__string create_Func_void_std__string(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = ReactNativeMaps::Func_void_std__string::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](const std::string& result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
+  // pragma MARK: std::function<void(const MapFeatureHits& /* result */)>
+  Func_void_MapFeatureHits create_Func_void_MapFeatureHits(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = ReactNativeMaps::Func_void_MapFeatureHits::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const MapFeatureHits& result) mutable -> void {
       swiftClosure.call(result);
     };
   }

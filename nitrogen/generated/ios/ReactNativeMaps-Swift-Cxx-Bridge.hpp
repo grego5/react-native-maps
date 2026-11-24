@@ -8,22 +8,48 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `CameraFit` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct CameraFit; }
+// Forward declaration of `CameraMove` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct CameraMove; }
+// Forward declaration of `CameraReveal` to properly resolve imports.
+namespace margelo::nitro::mapssession { enum class CameraReveal; }
 // Forward declaration of `Coordinate` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct Coordinate; }
+// Forward declaration of `DragPreview` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct DragPreview; }
+// Forward declaration of `EdgePadding` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct EdgePadding; }
 // Forward declaration of `HybridMapSurfaceSpec` to properly resolve imports.
 namespace margelo::nitro::mapssession { class HybridMapSurfaceSpec; }
+// Forward declaration of `InitialFit` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct InitialFit; }
+// Forward declaration of `MapCameraEvent` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapCameraEvent; }
+// Forward declaration of `MapCameraPhase` to properly resolve imports.
+namespace margelo::nitro::mapssession { enum class MapCameraPhase; }
+// Forward declaration of `MapCamera` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapCamera; }
 // Forward declaration of `MapDragEvent` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapDragEvent; }
 // Forward declaration of `MapDragPhase` to properly resolve imports.
 namespace margelo::nitro::mapssession { enum class MapDragPhase; }
+// Forward declaration of `MapFeatureHits` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapFeatureHits; }
 // Forward declaration of `MapMarker` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapMarker; }
+// Forward declaration of `MapOptions` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapOptions; }
+// Forward declaration of `MapPoiTap` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapPoiTap; }
 // Forward declaration of `MapPoint` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapPoint; }
 // Forward declaration of `MapRoute` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapRoute; }
 // Forward declaration of `MapTap` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapTap; }
+// Forward declaration of `MapType` to properly resolve imports.
+namespace margelo::nitro::mapssession { enum class MapType; }
 // Forward declaration of `MarkerImage` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MarkerImage; }
 // Forward declaration of `RouteDrag` to properly resolve imports.
@@ -34,14 +60,27 @@ namespace margelo::nitro::mapssession { struct RouteDrag; }
 namespace ReactNativeMaps { class HybridMapSurfaceSpec_cxx; }
 
 // Include C++ defined types
+#include "CameraFit.hpp"
+#include "CameraMove.hpp"
+#include "CameraReveal.hpp"
 #include "Coordinate.hpp"
+#include "DragPreview.hpp"
+#include "EdgePadding.hpp"
 #include "HybridMapSurfaceSpec.hpp"
+#include "InitialFit.hpp"
+#include "MapCamera.hpp"
+#include "MapCameraEvent.hpp"
+#include "MapCameraPhase.hpp"
 #include "MapDragEvent.hpp"
 #include "MapDragPhase.hpp"
+#include "MapFeatureHits.hpp"
 #include "MapMarker.hpp"
+#include "MapOptions.hpp"
+#include "MapPoiTap.hpp"
 #include "MapPoint.hpp"
 #include "MapRoute.hpp"
 #include "MapTap.hpp"
+#include "MapType.hpp"
 #include "MarkerImage.hpp"
 #include "RouteDrag.hpp"
 #include <NitroModules/Promise.hpp>
@@ -105,6 +144,21 @@ namespace margelo::nitro::mapssession::bridge::swift {
     return optional.value();
   }
   
+  // pragma MARK: std::optional<MapPoint>
+  /**
+   * Specialized version of `std::optional<MapPoint>`.
+   */
+  using std__optional_MapPoint_ = std::optional<MapPoint>;
+  inline std::optional<MapPoint> create_std__optional_MapPoint_(const MapPoint& value) noexcept {
+    return std::optional<MapPoint>(value);
+  }
+  inline bool has_value_std__optional_MapPoint_(const std::optional<MapPoint>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline MapPoint get_std__optional_MapPoint_(const std::optional<MapPoint>& optional) noexcept {
+    return optional.value();
+  }
+  
   // pragma MARK: std::vector<MapMarker>
   /**
    * Specialized version of `std::vector<MapMarker>`.
@@ -125,6 +179,47 @@ namespace margelo::nitro::mapssession::bridge::swift {
     std::vector<Coordinate> vector;
     vector.reserve(size);
     return vector;
+  }
+  
+  // pragma MARK: std::vector<double>
+  /**
+   * Specialized version of `std::vector<double>`.
+   */
+  using std__vector_double_ = std::vector<double>;
+  inline std::vector<double> create_std__vector_double_(size_t size) noexcept {
+    std::vector<double> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::optional<std::vector<double>>
+  /**
+   * Specialized version of `std::optional<std::vector<double>>`.
+   */
+  using std__optional_std__vector_double__ = std::optional<std::vector<double>>;
+  inline std::optional<std::vector<double>> create_std__optional_std__vector_double__(const std::vector<double>& value) noexcept {
+    return std::optional<std::vector<double>>(value);
+  }
+  inline bool has_value_std__optional_std__vector_double__(const std::optional<std::vector<double>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::vector<double> get_std__optional_std__vector_double__(const std::optional<std::vector<double>>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<DragPreview>
+  /**
+   * Specialized version of `std::optional<DragPreview>`.
+   */
+  using std__optional_DragPreview_ = std::optional<DragPreview>;
+  inline std::optional<DragPreview> create_std__optional_DragPreview_(const DragPreview& value) noexcept {
+    return std::optional<DragPreview>(value);
+  }
+  inline bool has_value_std__optional_DragPreview_(const std::optional<DragPreview>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline DragPreview get_std__optional_DragPreview_(const std::optional<DragPreview>& optional) noexcept {
+    return optional.value();
   }
   
   // pragma MARK: std::optional<RouteDrag>
@@ -151,6 +246,133 @@ namespace margelo::nitro::mapssession::bridge::swift {
     std::vector<MapRoute> vector;
     vector.reserve(size);
     return vector;
+  }
+  
+  // pragma MARK: std::optional<MapType>
+  /**
+   * Specialized version of `std::optional<MapType>`.
+   */
+  using std__optional_MapType_ = std::optional<MapType>;
+  inline std::optional<MapType> create_std__optional_MapType_(const MapType& value) noexcept {
+    return std::optional<MapType>(value);
+  }
+  inline bool has_value_std__optional_MapType_(const std::optional<MapType>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline MapType get_std__optional_MapType_(const std::optional<MapType>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<bool>
+  /**
+   * Specialized version of `std::optional<bool>`.
+   */
+  using std__optional_bool_ = std::optional<bool>;
+  inline std::optional<bool> create_std__optional_bool_(const bool& value) noexcept {
+    return std::optional<bool>(value);
+  }
+  inline bool has_value_std__optional_bool_(const std::optional<bool>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline bool get_std__optional_bool_(const std::optional<bool>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<MapOptions>
+  /**
+   * Specialized version of `std::optional<MapOptions>`.
+   */
+  using std__optional_MapOptions_ = std::optional<MapOptions>;
+  inline std::optional<MapOptions> create_std__optional_MapOptions_(const MapOptions& value) noexcept {
+    return std::optional<MapOptions>(value);
+  }
+  inline bool has_value_std__optional_MapOptions_(const std::optional<MapOptions>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline MapOptions get_std__optional_MapOptions_(const std::optional<MapOptions>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<MapCamera>
+  /**
+   * Specialized version of `std::optional<MapCamera>`.
+   */
+  using std__optional_MapCamera_ = std::optional<MapCamera>;
+  inline std::optional<MapCamera> create_std__optional_MapCamera_(const MapCamera& value) noexcept {
+    return std::optional<MapCamera>(value);
+  }
+  inline bool has_value_std__optional_MapCamera_(const std::optional<MapCamera>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline MapCamera get_std__optional_MapCamera_(const std::optional<MapCamera>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<EdgePadding>
+  /**
+   * Specialized version of `std::optional<EdgePadding>`.
+   */
+  using std__optional_EdgePadding_ = std::optional<EdgePadding>;
+  inline std::optional<EdgePadding> create_std__optional_EdgePadding_(const EdgePadding& value) noexcept {
+    return std::optional<EdgePadding>(value);
+  }
+  inline bool has_value_std__optional_EdgePadding_(const std::optional<EdgePadding>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline EdgePadding get_std__optional_EdgePadding_(const std::optional<EdgePadding>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<InitialFit>
+  /**
+   * Specialized version of `std::optional<InitialFit>`.
+   */
+  using std__optional_InitialFit_ = std::optional<InitialFit>;
+  inline std::optional<InitialFit> create_std__optional_InitialFit_(const InitialFit& value) noexcept {
+    return std::optional<InitialFit>(value);
+  }
+  inline bool has_value_std__optional_InitialFit_(const std::optional<InitialFit>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline InitialFit get_std__optional_InitialFit_(const std::optional<InitialFit>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::function<void(const MapCameraEvent& /* event */)>
+  /**
+   * Specialized version of `std::function<void(const MapCameraEvent&)>`.
+   */
+  using Func_void_MapCameraEvent = std::function<void(const MapCameraEvent& /* event */)>;
+  /**
+   * Wrapper class for a `std::function<void(const MapCameraEvent& / * event * /)>`, this can be used from Swift.
+   */
+  class Func_void_MapCameraEvent_Wrapper final {
+  public:
+    explicit Func_void_MapCameraEvent_Wrapper(std::function<void(const MapCameraEvent& /* event */)>&& func): _function(std::make_unique<std::function<void(const MapCameraEvent& /* event */)>>(std::move(func))) {}
+    inline void call(MapCameraEvent event) const noexcept {
+      _function->operator()(event);
+    }
+  private:
+    std::unique_ptr<std::function<void(const MapCameraEvent& /* event */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_MapCameraEvent create_Func_void_MapCameraEvent(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_MapCameraEvent_Wrapper wrap_Func_void_MapCameraEvent(Func_void_MapCameraEvent value) noexcept {
+    return Func_void_MapCameraEvent_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::optional<std::function<void(const MapCameraEvent& /* event */)>>
+  /**
+   * Specialized version of `std::optional<std::function<void(const MapCameraEvent& / * event * /)>>`.
+   */
+  using std__optional_std__function_void_const_MapCameraEvent_____event______ = std::optional<std::function<void(const MapCameraEvent& /* event */)>>;
+  inline std::optional<std::function<void(const MapCameraEvent& /* event */)>> create_std__optional_std__function_void_const_MapCameraEvent_____event______(const std::function<void(const MapCameraEvent& /* event */)>& value) noexcept {
+    return std::optional<std::function<void(const MapCameraEvent& /* event */)>>(value);
+  }
+  inline bool has_value_std__optional_std__function_void_const_MapCameraEvent_____event______(const std::optional<std::function<void(const MapCameraEvent& /* event */)>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::function<void(const MapCameraEvent& /* event */)> get_std__optional_std__function_void_const_MapCameraEvent_____event______(const std::optional<std::function<void(const MapCameraEvent& /* event */)>>& optional) noexcept {
+    return optional.value();
   }
   
   // pragma MARK: std::function<void()>
@@ -238,18 +460,40 @@ namespace margelo::nitro::mapssession::bridge::swift {
     return optional.value();
   }
   
-  // pragma MARK: std::optional<bool>
+  // pragma MARK: std::function<void(const MapPoiTap& /* event */)>
   /**
-   * Specialized version of `std::optional<bool>`.
+   * Specialized version of `std::function<void(const MapPoiTap&)>`.
    */
-  using std__optional_bool_ = std::optional<bool>;
-  inline std::optional<bool> create_std__optional_bool_(const bool& value) noexcept {
-    return std::optional<bool>(value);
+  using Func_void_MapPoiTap = std::function<void(const MapPoiTap& /* event */)>;
+  /**
+   * Wrapper class for a `std::function<void(const MapPoiTap& / * event * /)>`, this can be used from Swift.
+   */
+  class Func_void_MapPoiTap_Wrapper final {
+  public:
+    explicit Func_void_MapPoiTap_Wrapper(std::function<void(const MapPoiTap& /* event */)>&& func): _function(std::make_unique<std::function<void(const MapPoiTap& /* event */)>>(std::move(func))) {}
+    inline void call(MapPoiTap event) const noexcept {
+      _function->operator()(event);
+    }
+  private:
+    std::unique_ptr<std::function<void(const MapPoiTap& /* event */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_MapPoiTap create_Func_void_MapPoiTap(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_MapPoiTap_Wrapper wrap_Func_void_MapPoiTap(Func_void_MapPoiTap value) noexcept {
+    return Func_void_MapPoiTap_Wrapper(std::move(value));
   }
-  inline bool has_value_std__optional_bool_(const std::optional<bool>& optional) noexcept {
+  
+  // pragma MARK: std::optional<std::function<void(const MapPoiTap& /* event */)>>
+  /**
+   * Specialized version of `std::optional<std::function<void(const MapPoiTap& / * event * /)>>`.
+   */
+  using std__optional_std__function_void_const_MapPoiTap_____event______ = std::optional<std::function<void(const MapPoiTap& /* event */)>>;
+  inline std::optional<std::function<void(const MapPoiTap& /* event */)>> create_std__optional_std__function_void_const_MapPoiTap_____event______(const std::function<void(const MapPoiTap& /* event */)>& value) noexcept {
+    return std::optional<std::function<void(const MapPoiTap& /* event */)>>(value);
+  }
+  inline bool has_value_std__optional_std__function_void_const_MapPoiTap_____event______(const std::optional<std::function<void(const MapPoiTap& /* event */)>>& optional) noexcept {
     return optional.has_value();
   }
-  inline bool get_std__optional_bool_(const std::optional<bool>& optional) noexcept {
+  inline std::function<void(const MapPoiTap& /* event */)> get_std__optional_std__function_void_const_MapPoiTap_____event______(const std::optional<std::function<void(const MapPoiTap& /* event */)>>& optional) noexcept {
     return optional.value();
   }
   
@@ -322,6 +566,104 @@ namespace margelo::nitro::mapssession::bridge::swift {
   Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
     return Func_void_std__exception_ptr_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::optional<CameraMove>
+  /**
+   * Specialized version of `std::optional<CameraMove>`.
+   */
+  using std__optional_CameraMove_ = std::optional<CameraMove>;
+  inline std::optional<CameraMove> create_std__optional_CameraMove_(const CameraMove& value) noexcept {
+    return std::optional<CameraMove>(value);
+  }
+  inline bool has_value_std__optional_CameraMove_(const std::optional<CameraMove>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline CameraMove get_std__optional_CameraMove_(const std::optional<CameraMove>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<MapCamera>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<MapCamera>>`.
+   */
+  using std__shared_ptr_Promise_MapCamera__ = std::shared_ptr<Promise<MapCamera>>;
+  inline std::shared_ptr<Promise<MapCamera>> create_std__shared_ptr_Promise_MapCamera__() noexcept {
+    return Promise<MapCamera>::create();
+  }
+  inline PromiseHolder<MapCamera> wrap_std__shared_ptr_Promise_MapCamera__(std::shared_ptr<Promise<MapCamera>> promise) noexcept {
+    return PromiseHolder<MapCamera>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const MapCamera& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const MapCamera&)>`.
+   */
+  using Func_void_MapCamera = std::function<void(const MapCamera& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const MapCamera& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_MapCamera_Wrapper final {
+  public:
+    explicit Func_void_MapCamera_Wrapper(std::function<void(const MapCamera& /* result */)>&& func): _function(std::make_unique<std::function<void(const MapCamera& /* result */)>>(std::move(func))) {}
+    inline void call(MapCamera result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const MapCamera& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_MapCamera create_Func_void_MapCamera(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_MapCamera_Wrapper wrap_Func_void_MapCamera(Func_void_MapCamera value) noexcept {
+    return Func_void_MapCamera_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::optional<CameraFit>
+  /**
+   * Specialized version of `std::optional<CameraFit>`.
+   */
+  using std__optional_CameraFit_ = std::optional<CameraFit>;
+  inline std::optional<CameraFit> create_std__optional_CameraFit_(const CameraFit& value) noexcept {
+    return std::optional<CameraFit>(value);
+  }
+  inline bool has_value_std__optional_CameraFit_(const std::optional<CameraFit>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline CameraFit get_std__optional_CameraFit_(const std::optional<CameraFit>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<CameraReveal>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<CameraReveal>>`.
+   */
+  using std__shared_ptr_Promise_CameraReveal__ = std::shared_ptr<Promise<CameraReveal>>;
+  inline std::shared_ptr<Promise<CameraReveal>> create_std__shared_ptr_Promise_CameraReveal__() noexcept {
+    return Promise<CameraReveal>::create();
+  }
+  inline PromiseHolder<CameraReveal> wrap_std__shared_ptr_Promise_CameraReveal__(std::shared_ptr<Promise<CameraReveal>> promise) noexcept {
+    return PromiseHolder<CameraReveal>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(CameraReveal /* result */)>
+  /**
+   * Specialized version of `std::function<void(CameraReveal)>`.
+   */
+  using Func_void_CameraReveal = std::function<void(CameraReveal /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(CameraReveal / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_CameraReveal_Wrapper final {
+  public:
+    explicit Func_void_CameraReveal_Wrapper(std::function<void(CameraReveal /* result */)>&& func): _function(std::make_unique<std::function<void(CameraReveal /* result */)>>(std::move(func))) {}
+    inline void call(int result) const noexcept {
+      _function->operator()(static_cast<CameraReveal>(result));
+    }
+  private:
+    std::unique_ptr<std::function<void(CameraReveal /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_CameraReveal create_Func_void_CameraReveal(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_CameraReveal_Wrapper wrap_Func_void_CameraReveal(Func_void_CameraReveal value) noexcept {
+    return Func_void_CameraReveal_Wrapper(std::move(value));
   }
   
   // pragma MARK: std::shared_ptr<Promise<MapPoint>>
@@ -426,6 +768,40 @@ namespace margelo::nitro::mapssession::bridge::swift {
     return Func_void_std__string_Wrapper(std::move(value));
   }
   
+  // pragma MARK: std::shared_ptr<Promise<MapFeatureHits>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<MapFeatureHits>>`.
+   */
+  using std__shared_ptr_Promise_MapFeatureHits__ = std::shared_ptr<Promise<MapFeatureHits>>;
+  inline std::shared_ptr<Promise<MapFeatureHits>> create_std__shared_ptr_Promise_MapFeatureHits__() noexcept {
+    return Promise<MapFeatureHits>::create();
+  }
+  inline PromiseHolder<MapFeatureHits> wrap_std__shared_ptr_Promise_MapFeatureHits__(std::shared_ptr<Promise<MapFeatureHits>> promise) noexcept {
+    return PromiseHolder<MapFeatureHits>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const MapFeatureHits& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const MapFeatureHits&)>`.
+   */
+  using Func_void_MapFeatureHits = std::function<void(const MapFeatureHits& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const MapFeatureHits& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_MapFeatureHits_Wrapper final {
+  public:
+    explicit Func_void_MapFeatureHits_Wrapper(std::function<void(const MapFeatureHits& /* result */)>&& func): _function(std::make_unique<std::function<void(const MapFeatureHits& /* result */)>>(std::move(func))) {}
+    inline void call(MapFeatureHits result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const MapFeatureHits& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_MapFeatureHits create_Func_void_MapFeatureHits(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_MapFeatureHits_Wrapper wrap_Func_void_MapFeatureHits(Func_void_MapFeatureHits value) noexcept {
+    return Func_void_MapFeatureHits_Wrapper(std::move(value));
+  }
+  
   // pragma MARK: std::shared_ptr<HybridMapSurfaceSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridMapSurfaceSpec>`.
@@ -445,6 +821,24 @@ namespace margelo::nitro::mapssession::bridge::swift {
   }
   inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<void>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<MapCamera>>>
+  using Result_std__shared_ptr_Promise_MapCamera___ = Result<std::shared_ptr<Promise<MapCamera>>>;
+  inline Result_std__shared_ptr_Promise_MapCamera___ create_Result_std__shared_ptr_Promise_MapCamera___(const std::shared_ptr<Promise<MapCamera>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<MapCamera>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_MapCamera___ create_Result_std__shared_ptr_Promise_MapCamera___(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<MapCamera>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<CameraReveal>>>
+  using Result_std__shared_ptr_Promise_CameraReveal___ = Result<std::shared_ptr<Promise<CameraReveal>>>;
+  inline Result_std__shared_ptr_Promise_CameraReveal___ create_Result_std__shared_ptr_Promise_CameraReveal___(const std::shared_ptr<Promise<CameraReveal>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<CameraReveal>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_CameraReveal___ create_Result_std__shared_ptr_Promise_CameraReveal___(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<CameraReveal>>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<Promise<MapPoint>>>
@@ -472,6 +866,15 @@ namespace margelo::nitro::mapssession::bridge::swift {
   }
   inline Result_std__shared_ptr_Promise_std__string___ create_Result_std__shared_ptr_Promise_std__string___(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<std::string>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<MapFeatureHits>>>
+  using Result_std__shared_ptr_Promise_MapFeatureHits___ = Result<std::shared_ptr<Promise<MapFeatureHits>>>;
+  inline Result_std__shared_ptr_Promise_MapFeatureHits___ create_Result_std__shared_ptr_Promise_MapFeatureHits___(const std::shared_ptr<Promise<MapFeatureHits>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<MapFeatureHits>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_MapFeatureHits___ create_Result_std__shared_ptr_Promise_MapFeatureHits___(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<MapFeatureHits>>>::withError(error);
   }
 
 } // namespace margelo::nitro::mapssession::bridge::swift

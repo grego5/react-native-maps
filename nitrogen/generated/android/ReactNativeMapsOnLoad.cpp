@@ -16,8 +16,10 @@
 #include <NitroModules/HybridObjectRegistry.hpp>
 
 #include "JHybridMapSurfaceSpec.hpp"
+#include "JFunc_void_MapCameraEvent.hpp"
 #include "JFunc_void.hpp"
 #include "JFunc_void_MapTap.hpp"
+#include "JFunc_void_MapPoiTap.hpp"
 #include "JFunc_void_MapDragEvent.hpp"
 #include "views/JHybridMapSurfaceStateUpdater.hpp"
 #include <NitroModules/DefaultConstructableObject.hpp>
@@ -45,8 +47,10 @@ void registerAllNatives() {
 
   // Register native JNI methods
   margelo::nitro::mapssession::JHybridMapSurfaceSpec::CxxPart::registerNatives();
+  margelo::nitro::mapssession::JFunc_void_MapCameraEvent_cxx::registerNatives();
   margelo::nitro::mapssession::JFunc_void_cxx::registerNatives();
   margelo::nitro::mapssession::JFunc_void_MapTap_cxx::registerNatives();
+  margelo::nitro::mapssession::JFunc_void_MapPoiTap_cxx::registerNatives();
   margelo::nitro::mapssession::JFunc_void_MapDragEvent_cxx::registerNatives();
   margelo::nitro::mapssession::views::JHybridMapSurfaceStateUpdater::registerNatives();
 

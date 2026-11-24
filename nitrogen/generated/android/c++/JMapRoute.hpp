@@ -11,8 +11,14 @@
 #include "MapRoute.hpp"
 
 #include "Coordinate.hpp"
+#include "DragPreview.hpp"
 #include "JCoordinate.hpp"
+#include "JDragPreview.hpp"
+#include "JMapPoint.hpp"
+#include "JMarkerImage.hpp"
 #include "JRouteDrag.hpp"
+#include "MapPoint.hpp"
+#include "MarkerImage.hpp"
 #include "RouteDrag.hpp"
 #include <optional>
 #include <string>
@@ -49,6 +55,8 @@ namespace margelo::nitro::mapssession {
       jni::local_ref<jni::JDouble> strokeWidth = this->getFieldValue(fieldStrokeWidth);
       static const auto fieldZIndex = clazz->getField<jni::JDouble>("zIndex");
       jni::local_ref<jni::JDouble> zIndex = this->getFieldValue(fieldZIndex);
+      static const auto fieldDashPattern = clazz->getField<jni::JArrayDouble>("dashPattern");
+      jni::local_ref<jni::JArrayDouble> dashPattern = this->getFieldValue(fieldDashPattern);
       static const auto fieldDrag = clazz->getField<JRouteDrag>("drag");
       jni::local_ref<JRouteDrag> drag = this->getFieldValue(fieldDrag);
       return MapRoute(
@@ -67,6 +75,12 @@ namespace margelo::nitro::mapssession {
         strokeColor != nullptr ? std::make_optional(strokeColor->toStdString()) : std::nullopt,
         strokeWidth != nullptr ? std::make_optional(strokeWidth->value()) : std::nullopt,
         zIndex != nullptr ? std::make_optional(zIndex->value()) : std::nullopt,
+        dashPattern != nullptr ? std::make_optional([&]() {
+          size_t __size = dashPattern->size();
+          std::vector<double> __vector(__size);
+          dashPattern->getRegion(0, __size, __vector.data());
+          return __vector;
+        }()) : std::nullopt,
         drag != nullptr ? std::make_optional(drag->toCpp()) : std::nullopt
       );
     }
@@ -77,7 +91,7 @@ namespace margelo::nitro::mapssession {
      */
     [[maybe_unused]]
     static jni::local_ref<JMapRoute::javaobject> fromCpp(const MapRoute& value) {
-      using JSignature = JMapRoute(jni::alias_ref<jni::JString>, jni::alias_ref<jni::JArrayClass<JCoordinate>>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<JRouteDrag>);
+      using JSignature = JMapRoute(jni::alias_ref<jni::JString>, jni::alias_ref<jni::JArrayClass<JCoordinate>>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JArrayDouble>, jni::alias_ref<JRouteDrag>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
@@ -97,6 +111,12 @@ namespace margelo::nitro::mapssession {
         value.strokeColor.has_value() ? jni::make_jstring(value.strokeColor.value()) : nullptr,
         value.strokeWidth.has_value() ? jni::JDouble::valueOf(value.strokeWidth.value()) : nullptr,
         value.zIndex.has_value() ? jni::JDouble::valueOf(value.zIndex.value()) : nullptr,
+        value.dashPattern.has_value() ? [&]() {
+          size_t __size = value.dashPattern.value().size();
+          jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);
+          __array->setRegion(0, __size, value.dashPattern.value().data());
+          return __array;
+        }() : nullptr,
         value.drag.has_value() ? JRouteDrag::fromCpp(value.drag.value()) : nullptr
       );
     }

@@ -18,9 +18,15 @@ public extension MapMarker {
   /**
    * Create a new instance of `MapMarker`.
    */
-  init(id: String, coordinate: Coordinate, title: String?, image: MarkerImage?) {
+  init(id: String, coordinate: Coordinate, title: String?, description: String?, image: MarkerImage?, anchor: MapPoint?, zIndex: Double?) {
     self.init(std.string(id), coordinate, { () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = title {
+        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_std__string_ in
+      if let __unwrappedValue = description {
         return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
       } else {
         return .init()
@@ -28,6 +34,18 @@ public extension MapMarker {
     }(), { () -> bridge.std__optional_MarkerImage_ in
       if let __unwrappedValue = image {
         return bridge.create_std__optional_MarkerImage_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_MapPoint_ in
+      if let __unwrappedValue = anchor {
+        return bridge.create_std__optional_MapPoint_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_double_ in
+      if let __unwrappedValue = zIndex {
+        return bridge.create_std__optional_double_(__unwrappedValue)
       } else {
         return .init()
       }
@@ -57,7 +75,36 @@ public extension MapMarker {
   }
   
   @inline(__always)
+  var description: String? {
+    return { () -> String? in
+      if bridge.has_value_std__optional_std__string_(self.__description) {
+        let __unwrapped = bridge.get_std__optional_std__string_(self.__description)
+        return String(__unwrapped)
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
   var image: MarkerImage? {
     return self.__image.value
+  }
+  
+  @inline(__always)
+  var anchor: MapPoint? {
+    return self.__anchor.value
+  }
+  
+  @inline(__always)
+  var zIndex: Double? {
+    return { () -> Double? in
+      if bridge.has_value_std__optional_double_(self.__zIndex) {
+        let __unwrapped = bridge.get_std__optional_double_(self.__zIndex)
+        return __unwrapped
+      } else {
+        return nil
+      }
+    }()
   }
 }

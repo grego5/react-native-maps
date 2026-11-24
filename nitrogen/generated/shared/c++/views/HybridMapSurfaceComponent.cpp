@@ -21,12 +21,20 @@ namespace margelo::nitro::mapssession::views {
                                                const HybridMapSurfaceProps& sourceProps,
                                                const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    features(nitro::ReactProp<MapFeatures>::fromRawValue("MapSurface", "features", rawProps, sourceProps.features)),
+    markers(nitro::ReactProp<std::vector<MapMarker>>::fromRawValue("MapSurface", "markers", rawProps, sourceProps.markers)),
+    routes(nitro::ReactProp<std::vector<MapRoute>>::fromRawValue("MapSurface", "routes", rawProps, sourceProps.routes)),
     provider(nitro::ReactProp<MapProvider>::fromRawValue("MapSurface", "provider", rawProps, sourceProps.provider)),
+    options(nitro::ReactProp<std::optional<MapOptions>>::fromRawValue("MapSurface", "options", rawProps, sourceProps.options)),
+    initialCamera(nitro::ReactProp<std::optional<MapCamera>>::fromRawValue("MapSurface", "initialCamera", rawProps, sourceProps.initialCamera)),
+    initialFit(nitro::ReactProp<std::optional<InitialFit>>::fromRawValue("MapSurface", "initialFit", rawProps, sourceProps.initialFit)),
+    onCameraMove(nitro::ReactProp<std::optional<std::function<void(const MapCameraEvent& /* event */)>>>::fromRawValue("MapSurface", "onCameraMove", rawProps, sourceProps.onCameraMove)),
     onReady(nitro::ReactProp<std::optional<std::function<void()>>>::fromRawValue("MapSurface", "onReady", rawProps, sourceProps.onReady)),
     onRendered(nitro::ReactProp<std::optional<std::function<void()>>>::fromRawValue("MapSurface", "onRendered", rawProps, sourceProps.onRendered)),
     onTap(nitro::ReactProp<std::optional<std::function<void(const MapTap& /* event */)>>>::fromRawValue("MapSurface", "onTap", rawProps, sourceProps.onTap)),
+    onPoiTap(nitro::ReactProp<std::optional<std::function<void(const MapPoiTap& /* event */)>>>::fromRawValue("MapSurface", "onPoiTap", rawProps, sourceProps.onPoiTap)),
     pinDragEnabled(nitro::ReactProp<std::optional<bool>>::fromRawValue("MapSurface", "pinDragEnabled", rawProps, sourceProps.pinDragEnabled)),
+    pinDragPreview(nitro::ReactProp<std::optional<DragPreview>>::fromRawValue("MapSurface", "pinDragPreview", rawProps, sourceProps.pinDragPreview)),
+    dropRadius(nitro::ReactProp<std::optional<double>>::fromRawValue("MapSurface", "dropRadius", rawProps, sourceProps.dropRadius)),
     onDrag(nitro::ReactProp<std::optional<std::function<void(const MapDragEvent& /* event */)>>>::fromRawValue("MapSurface", "onDrag", rawProps, sourceProps.onDrag)),
     hybridRef(nitro::ReactProp<std::optional<std::function<void(const std::shared_ptr<HybridMapSurfaceSpec>& /* ref */)>>>::fromRawValue("MapSurface", "hybridRef", rawProps, sourceProps.hybridRef)) {
 #ifdef ANDROID
@@ -36,12 +44,20 @@ namespace margelo::nitro::mapssession::views {
 
   bool HybridMapSurfaceProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
-      case hashString("features"): return true;
+      case hashString("markers"): return true;
+      case hashString("routes"): return true;
       case hashString("provider"): return true;
+      case hashString("options"): return true;
+      case hashString("initialCamera"): return true;
+      case hashString("initialFit"): return true;
+      case hashString("onCameraMove"): return true;
       case hashString("onReady"): return true;
       case hashString("onRendered"): return true;
       case hashString("onTap"): return true;
+      case hashString("onPoiTap"): return true;
       case hashString("pinDragEnabled"): return true;
+      case hashString("pinDragPreview"): return true;
+      case hashString("dropRadius"): return true;
       case hashString("onDrag"): return true;
       case hashString("hybridRef"): return true;
       default: return false;

@@ -22,6 +22,7 @@
 #include "JMapPoint.hpp"
 #include <string>
 #include <optional>
+#include <vector>
 
 namespace margelo::nitro::mapssession {
 

@@ -50,28 +50,51 @@ namespace margelo::nitro::mapssession {
 
   public:
     // Properties
-    MapFeatures getFeatures() override;
-    void setFeatures(const MapFeatures& features) override;
+    std::vector<MapMarker> getMarkers() override;
+    void setMarkers(const std::vector<MapMarker>& markers) override;
+    std::vector<MapRoute> getRoutes() override;
+    void setRoutes(const std::vector<MapRoute>& routes) override;
     MapProvider getProvider() override;
     void setProvider(MapProvider provider) override;
+    std::optional<MapOptions> getOptions() override;
+    void setOptions(const std::optional<MapOptions>& options) override;
+    std::optional<MapCamera> getInitialCamera() override;
+    void setInitialCamera(const std::optional<MapCamera>& initialCamera) override;
+    std::optional<InitialFit> getInitialFit() override;
+    void setInitialFit(const std::optional<InitialFit>& initialFit) override;
+    std::optional<std::function<void(const MapCameraEvent& /* event */)>> getOnCameraMove() override;
+    void setOnCameraMove(const std::optional<std::function<void(const MapCameraEvent& /* event */)>>& onCameraMove) override;
     std::optional<std::function<void()>> getOnReady() override;
     void setOnReady(const std::optional<std::function<void()>>& onReady) override;
     std::optional<std::function<void()>> getOnRendered() override;
     void setOnRendered(const std::optional<std::function<void()>>& onRendered) override;
     std::optional<std::function<void(const MapTap& /* event */)>> getOnTap() override;
     void setOnTap(const std::optional<std::function<void(const MapTap& /* event */)>>& onTap) override;
+    std::optional<std::function<void(const MapPoiTap& /* event */)>> getOnPoiTap() override;
+    void setOnPoiTap(const std::optional<std::function<void(const MapPoiTap& /* event */)>>& onPoiTap) override;
     std::optional<bool> getPinDragEnabled() override;
     void setPinDragEnabled(std::optional<bool> pinDragEnabled) override;
+    std::optional<DragPreview> getPinDragPreview() override;
+    void setPinDragPreview(const std::optional<DragPreview>& pinDragPreview) override;
+    std::optional<double> getDropRadius() override;
+    void setDropRadius(std::optional<double> dropRadius) override;
     std::optional<std::function<void(const MapDragEvent& /* event */)>> getOnDrag() override;
     void setOnDrag(const std::optional<std::function<void(const MapDragEvent& /* event */)>>& onDrag) override;
 
   public:
     // Methods
-    std::shared_ptr<Promise<void>> setCamera(const Coordinate& center, double zoom, bool animated) override;
+    std::shared_ptr<Promise<void>> setCamera(const Coordinate& center, double zoom, const std::optional<CameraMove>& move) override;
+    std::shared_ptr<Promise<MapCamera>> getCamera() override;
+    std::shared_ptr<Promise<void>> fitCoordinates(const std::vector<Coordinate>& coordinates, const std::optional<CameraFit>& fit) override;
+    std::shared_ptr<Promise<CameraReveal>> revealCoordinates(const std::vector<Coordinate>& coordinates, const std::optional<CameraFit>& fit) override;
+    std::shared_ptr<Promise<MapCamera>> cameraFor(const std::vector<Coordinate>& coordinates, const std::optional<CameraFit>& fit) override;
     std::shared_ptr<Promise<MapPoint>> project(const Coordinate& coordinate) override;
     std::shared_ptr<Promise<Coordinate>> unproject(const MapPoint& point) override;
     std::shared_ptr<Promise<std::string>> takeSnapshot() override;
     std::shared_ptr<Promise<void>> cancelDrag() override;
+    std::shared_ptr<Promise<MapFeatureHits>> queryFeatures(const MapPoint& point, double radius) override;
+    std::shared_ptr<Promise<void>> showCallout(const std::string& markerId) override;
+    std::shared_ptr<Promise<void>> hideCallout() override;
 
   private:
     jni::global_ref<JHybridMapSurfaceSpec::JavaPart> _javaPart;

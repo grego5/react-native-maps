@@ -7,31 +7,53 @@
 
 #include "JHybridMapSurfaceSpec.hpp"
 
-// Forward declaration of `MapFeatures` to properly resolve imports.
-namespace margelo::nitro::mapssession { struct MapFeatures; }
 // Forward declaration of `MapMarker` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapMarker; }
 // Forward declaration of `Coordinate` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct Coordinate; }
 // Forward declaration of `MarkerImage` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MarkerImage; }
+// Forward declaration of `MapPoint` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapPoint; }
 // Forward declaration of `MapRoute` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapRoute; }
 // Forward declaration of `RouteDrag` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct RouteDrag; }
+// Forward declaration of `DragPreview` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct DragPreview; }
 // Forward declaration of `MapProvider` to properly resolve imports.
 namespace margelo::nitro::mapssession { enum class MapProvider; }
+// Forward declaration of `MapOptions` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapOptions; }
+// Forward declaration of `MapType` to properly resolve imports.
+namespace margelo::nitro::mapssession { enum class MapType; }
+// Forward declaration of `MapCamera` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapCamera; }
+// Forward declaration of `InitialFit` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct InitialFit; }
+// Forward declaration of `EdgePadding` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct EdgePadding; }
+// Forward declaration of `MapCameraEvent` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapCameraEvent; }
+// Forward declaration of `MapCameraPhase` to properly resolve imports.
+namespace margelo::nitro::mapssession { enum class MapCameraPhase; }
 // Forward declaration of `MapTap` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapTap; }
-// Forward declaration of `MapPoint` to properly resolve imports.
-namespace margelo::nitro::mapssession { struct MapPoint; }
+// Forward declaration of `MapPoiTap` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapPoiTap; }
 // Forward declaration of `MapDragEvent` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapDragEvent; }
 // Forward declaration of `MapDragPhase` to properly resolve imports.
 namespace margelo::nitro::mapssession { enum class MapDragPhase; }
+// Forward declaration of `CameraReveal` to properly resolve imports.
+namespace margelo::nitro::mapssession { enum class CameraReveal; }
+// Forward declaration of `MapFeatureHits` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapFeatureHits; }
+// Forward declaration of `CameraMove` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct CameraMove; }
+// Forward declaration of `CameraFit` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct CameraFit; }
 
-#include "MapFeatures.hpp"
-#include "JMapFeatures.hpp"
 #include "MapMarker.hpp"
 #include <vector>
 #include "JMapMarker.hpp"
@@ -41,20 +63,40 @@ namespace margelo::nitro::mapssession { enum class MapDragPhase; }
 #include <optional>
 #include "MarkerImage.hpp"
 #include "JMarkerImage.hpp"
+#include "MapPoint.hpp"
+#include "JMapPoint.hpp"
 #include "MapRoute.hpp"
 #include "JMapRoute.hpp"
 #include "RouteDrag.hpp"
 #include "JRouteDrag.hpp"
+#include "DragPreview.hpp"
+#include "JDragPreview.hpp"
 #include "MapProvider.hpp"
 #include "JMapProvider.hpp"
+#include "MapOptions.hpp"
+#include "JMapOptions.hpp"
+#include "MapType.hpp"
+#include "JMapType.hpp"
+#include "MapCamera.hpp"
+#include "JMapCamera.hpp"
+#include "InitialFit.hpp"
+#include "JInitialFit.hpp"
+#include "EdgePadding.hpp"
+#include "JEdgePadding.hpp"
+#include "MapCameraEvent.hpp"
 #include <functional>
-#include "JFunc_void.hpp"
+#include "JFunc_void_MapCameraEvent.hpp"
 #include <NitroModules/JNICallable.hpp>
+#include "JMapCameraEvent.hpp"
+#include "MapCameraPhase.hpp"
+#include "JMapCameraPhase.hpp"
+#include "JFunc_void.hpp"
 #include "MapTap.hpp"
 #include "JFunc_void_MapTap.hpp"
 #include "JMapTap.hpp"
-#include "MapPoint.hpp"
-#include "JMapPoint.hpp"
+#include "MapPoiTap.hpp"
+#include "JFunc_void_MapPoiTap.hpp"
+#include "JMapPoiTap.hpp"
 #include "MapDragEvent.hpp"
 #include "JFunc_void_MapDragEvent.hpp"
 #include "JMapDragEvent.hpp"
@@ -63,6 +105,14 @@ namespace margelo::nitro::mapssession { enum class MapDragPhase; }
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/JPromise.hpp>
 #include <NitroModules/JUnit.hpp>
+#include "CameraReveal.hpp"
+#include "JCameraReveal.hpp"
+#include "MapFeatureHits.hpp"
+#include "JMapFeatureHits.hpp"
+#include "CameraMove.hpp"
+#include "JCameraMove.hpp"
+#include "CameraFit.hpp"
+#include "JCameraFit.hpp"
 
 namespace margelo::nitro::mapssession {
 
@@ -94,14 +144,59 @@ namespace margelo::nitro::mapssession {
   }
 
   // Properties
-  MapFeatures JHybridMapSurfaceSpec::getFeatures() {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JMapFeatures>()>("getFeatures");
+  std::vector<MapMarker> JHybridMapSurfaceSpec::getMarkers() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JMapMarker>>()>("getMarkers");
     auto __result = method(_javaPart);
-    return __result->toCpp();
+    return [&](auto&& __input) {
+      size_t __size = __input->size();
+      std::vector<MapMarker> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __input->getElement(__i);
+        __vector.push_back(__element->toCpp());
+      }
+      return __vector;
+    }(__result);
   }
-  void JHybridMapSurfaceSpec::setFeatures(const MapFeatures& features) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JMapFeatures> /* features */)>("setFeatures");
-    method(_javaPart, JMapFeatures::fromCpp(features));
+  void JHybridMapSurfaceSpec::setMarkers(const std::vector<MapMarker>& markers) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JArrayClass<JMapMarker>> /* markers */)>("setMarkers");
+    method(_javaPart, [&](auto&& __input) {
+      size_t __size = __input.size();
+      jni::local_ref<jni::JArrayClass<JMapMarker>> __array = jni::JArrayClass<JMapMarker>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = __input[__i];
+        auto __elementJni = JMapMarker::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
+      }
+      return __array;
+    }(markers));
+  }
+  std::vector<MapRoute> JHybridMapSurfaceSpec::getRoutes() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JMapRoute>>()>("getRoutes");
+    auto __result = method(_javaPart);
+    return [&](auto&& __input) {
+      size_t __size = __input->size();
+      std::vector<MapRoute> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __input->getElement(__i);
+        __vector.push_back(__element->toCpp());
+      }
+      return __vector;
+    }(__result);
+  }
+  void JHybridMapSurfaceSpec::setRoutes(const std::vector<MapRoute>& routes) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JArrayClass<JMapRoute>> /* routes */)>("setRoutes");
+    method(_javaPart, [&](auto&& __input) {
+      size_t __size = __input.size();
+      jni::local_ref<jni::JArrayClass<JMapRoute>> __array = jni::JArrayClass<JMapRoute>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = __input[__i];
+        auto __elementJni = JMapRoute::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
+      }
+      return __array;
+    }(routes));
   }
   MapProvider JHybridMapSurfaceSpec::getProvider() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JMapProvider>()>("getProvider");
@@ -111,6 +206,50 @@ namespace margelo::nitro::mapssession {
   void JHybridMapSurfaceSpec::setProvider(MapProvider provider) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JMapProvider> /* provider */)>("setProvider");
     method(_javaPart, JMapProvider::fromCpp(provider));
+  }
+  std::optional<MapOptions> JHybridMapSurfaceSpec::getOptions() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JMapOptions>()>("getOptions");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+  }
+  void JHybridMapSurfaceSpec::setOptions(const std::optional<MapOptions>& options) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JMapOptions> /* options */)>("setOptions");
+    method(_javaPart, options.has_value() ? JMapOptions::fromCpp(options.value()) : nullptr);
+  }
+  std::optional<MapCamera> JHybridMapSurfaceSpec::getInitialCamera() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JMapCamera>()>("getInitialCamera");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+  }
+  void JHybridMapSurfaceSpec::setInitialCamera(const std::optional<MapCamera>& initialCamera) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JMapCamera> /* initialCamera */)>("setInitialCamera");
+    method(_javaPart, initialCamera.has_value() ? JMapCamera::fromCpp(initialCamera.value()) : nullptr);
+  }
+  std::optional<InitialFit> JHybridMapSurfaceSpec::getInitialFit() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JInitialFit>()>("getInitialFit");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+  }
+  void JHybridMapSurfaceSpec::setInitialFit(const std::optional<InitialFit>& initialFit) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JInitialFit> /* initialFit */)>("setInitialFit");
+    method(_javaPart, initialFit.has_value() ? JInitialFit::fromCpp(initialFit.value()) : nullptr);
+  }
+  std::optional<std::function<void(const MapCameraEvent& /* event */)>> JHybridMapSurfaceSpec::getOnCameraMove() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JFunc_void_MapCameraEvent::javaobject>()>("getOnCameraMove_cxx");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional([&]() -> std::function<void(const MapCameraEvent& /* event */)> {
+      if (__result->isInstanceOf(JFunc_void_MapCameraEvent_cxx::javaClassStatic())) [[likely]] {
+        auto downcast = jni::static_ref_cast<JFunc_void_MapCameraEvent_cxx::javaobject>(__result);
+        return downcast->cthis()->getFunction();
+      } else {
+        auto __resultRef = jni::make_global(__result);
+        return JNICallable<JFunc_void_MapCameraEvent, void(MapCameraEvent)>(std::move(__resultRef));
+      }
+    }()) : std::nullopt;
+  }
+  void JHybridMapSurfaceSpec::setOnCameraMove(const std::optional<std::function<void(const MapCameraEvent& /* event */)>>& onCameraMove) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void_MapCameraEvent::javaobject> /* onCameraMove */)>("setOnCameraMove_cxx");
+    method(_javaPart, onCameraMove.has_value() ? JFunc_void_MapCameraEvent_cxx::fromCpp(onCameraMove.value()) : nullptr);
   }
   std::optional<std::function<void()>> JHybridMapSurfaceSpec::getOnReady() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JFunc_void::javaobject>()>("getOnReady_cxx");
@@ -163,6 +302,23 @@ namespace margelo::nitro::mapssession {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void_MapTap::javaobject> /* onTap */)>("setOnTap_cxx");
     method(_javaPart, onTap.has_value() ? JFunc_void_MapTap_cxx::fromCpp(onTap.value()) : nullptr);
   }
+  std::optional<std::function<void(const MapPoiTap& /* event */)>> JHybridMapSurfaceSpec::getOnPoiTap() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JFunc_void_MapPoiTap::javaobject>()>("getOnPoiTap_cxx");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional([&]() -> std::function<void(const MapPoiTap& /* event */)> {
+      if (__result->isInstanceOf(JFunc_void_MapPoiTap_cxx::javaClassStatic())) [[likely]] {
+        auto downcast = jni::static_ref_cast<JFunc_void_MapPoiTap_cxx::javaobject>(__result);
+        return downcast->cthis()->getFunction();
+      } else {
+        auto __resultRef = jni::make_global(__result);
+        return JNICallable<JFunc_void_MapPoiTap, void(MapPoiTap)>(std::move(__resultRef));
+      }
+    }()) : std::nullopt;
+  }
+  void JHybridMapSurfaceSpec::setOnPoiTap(const std::optional<std::function<void(const MapPoiTap& /* event */)>>& onPoiTap) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void_MapPoiTap::javaobject> /* onPoiTap */)>("setOnPoiTap_cxx");
+    method(_javaPart, onPoiTap.has_value() ? JFunc_void_MapPoiTap_cxx::fromCpp(onPoiTap.value()) : nullptr);
+  }
   std::optional<bool> JHybridMapSurfaceSpec::getPinDragEnabled() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JBoolean>()>("getPinDragEnabled");
     auto __result = method(_javaPart);
@@ -171,6 +327,24 @@ namespace margelo::nitro::mapssession {
   void JHybridMapSurfaceSpec::setPinDragEnabled(std::optional<bool> pinDragEnabled) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JBoolean> /* pinDragEnabled */)>("setPinDragEnabled");
     method(_javaPart, pinDragEnabled.has_value() ? jni::JBoolean::valueOf(pinDragEnabled.value()) : nullptr);
+  }
+  std::optional<DragPreview> JHybridMapSurfaceSpec::getPinDragPreview() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JDragPreview>()>("getPinDragPreview");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+  }
+  void JHybridMapSurfaceSpec::setPinDragPreview(const std::optional<DragPreview>& pinDragPreview) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JDragPreview> /* pinDragPreview */)>("setPinDragPreview");
+    method(_javaPart, pinDragPreview.has_value() ? JDragPreview::fromCpp(pinDragPreview.value()) : nullptr);
+  }
+  std::optional<double> JHybridMapSurfaceSpec::getDropRadius() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JDouble>()>("getDropRadius");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->value()) : std::nullopt;
+  }
+  void JHybridMapSurfaceSpec::setDropRadius(std::optional<double> dropRadius) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JDouble> /* dropRadius */)>("setDropRadius");
+    method(_javaPart, dropRadius.has_value() ? jni::JDouble::valueOf(dropRadius.value()) : nullptr);
   }
   std::optional<std::function<void(const MapDragEvent& /* event */)>> JHybridMapSurfaceSpec::getOnDrag() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JFunc_void_MapDragEvent::javaobject>()>("getOnDrag_cxx");
@@ -191,13 +365,103 @@ namespace margelo::nitro::mapssession {
   }
 
   // Methods
-  std::shared_ptr<Promise<void>> JHybridMapSurfaceSpec::setCamera(const Coordinate& center, double zoom, bool animated) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JCoordinate> /* center */, double /* zoom */, jboolean /* animated */)>("setCamera");
-    auto __result = method(_javaPart, JCoordinate::fromCpp(center), zoom, animated);
+  std::shared_ptr<Promise<void>> JHybridMapSurfaceSpec::setCamera(const Coordinate& center, double zoom, const std::optional<CameraMove>& move) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JCoordinate> /* center */, double /* zoom */, jni::alias_ref<JCameraMove> /* move */)>("setCamera");
+    auto __result = method(_javaPart, JCoordinate::fromCpp(center), zoom, move.has_value() ? JCameraMove::fromCpp(move.value()) : nullptr);
     return [&]() {
       auto __promise = Promise<void>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
         __promise->resolve();
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<MapCamera>> JHybridMapSurfaceSpec::getCamera() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("getCamera");
+    auto __result = method(_javaPart);
+    return [&]() {
+      auto __promise = Promise<MapCamera>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JMapCamera>(__boxedResult);
+        __promise->resolve(__result->toCpp());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<void>> JHybridMapSurfaceSpec::fitCoordinates(const std::vector<Coordinate>& coordinates, const std::optional<CameraFit>& fit) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JArrayClass<JCoordinate>> /* coordinates */, jni::alias_ref<JCameraFit> /* fit */)>("fitCoordinates");
+    auto __result = method(_javaPart, [&](auto&& __input) {
+      size_t __size = __input.size();
+      jni::local_ref<jni::JArrayClass<JCoordinate>> __array = jni::JArrayClass<JCoordinate>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = __input[__i];
+        auto __elementJni = JCoordinate::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
+      }
+      return __array;
+    }(coordinates), fit.has_value() ? JCameraFit::fromCpp(fit.value()) : nullptr);
+    return [&]() {
+      auto __promise = Promise<void>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
+        __promise->resolve();
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<CameraReveal>> JHybridMapSurfaceSpec::revealCoordinates(const std::vector<Coordinate>& coordinates, const std::optional<CameraFit>& fit) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JArrayClass<JCoordinate>> /* coordinates */, jni::alias_ref<JCameraFit> /* fit */)>("revealCoordinates");
+    auto __result = method(_javaPart, [&](auto&& __input) {
+      size_t __size = __input.size();
+      jni::local_ref<jni::JArrayClass<JCoordinate>> __array = jni::JArrayClass<JCoordinate>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = __input[__i];
+        auto __elementJni = JCoordinate::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
+      }
+      return __array;
+    }(coordinates), fit.has_value() ? JCameraFit::fromCpp(fit.value()) : nullptr);
+    return [&]() {
+      auto __promise = Promise<CameraReveal>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JCameraReveal>(__boxedResult);
+        __promise->resolve(__result->toCpp());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<MapCamera>> JHybridMapSurfaceSpec::cameraFor(const std::vector<Coordinate>& coordinates, const std::optional<CameraFit>& fit) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JArrayClass<JCoordinate>> /* coordinates */, jni::alias_ref<JCameraFit> /* fit */)>("cameraFor");
+    auto __result = method(_javaPart, [&](auto&& __input) {
+      size_t __size = __input.size();
+      jni::local_ref<jni::JArrayClass<JCoordinate>> __array = jni::JArrayClass<JCoordinate>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = __input[__i];
+        auto __elementJni = JCoordinate::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
+      }
+      return __array;
+    }(coordinates), fit.has_value() ? JCameraFit::fromCpp(fit.value()) : nullptr);
+    return [&]() {
+      auto __promise = Promise<MapCamera>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JMapCamera>(__boxedResult);
+        __promise->resolve(__result->toCpp());
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);
@@ -256,6 +520,52 @@ namespace margelo::nitro::mapssession {
   }
   std::shared_ptr<Promise<void>> JHybridMapSurfaceSpec::cancelDrag() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("cancelDrag");
+    auto __result = method(_javaPart);
+    return [&]() {
+      auto __promise = Promise<void>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
+        __promise->resolve();
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<MapFeatureHits>> JHybridMapSurfaceSpec::queryFeatures(const MapPoint& point, double radius) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JMapPoint> /* point */, double /* radius */)>("queryFeatures");
+    auto __result = method(_javaPart, JMapPoint::fromCpp(point), radius);
+    return [&]() {
+      auto __promise = Promise<MapFeatureHits>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JMapFeatureHits>(__boxedResult);
+        __promise->resolve(__result->toCpp());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<void>> JHybridMapSurfaceSpec::showCallout(const std::string& markerId) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* markerId */)>("showCallout");
+    auto __result = method(_javaPart, jni::make_jstring(markerId));
+    return [&]() {
+      auto __promise = Promise<void>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
+        __promise->resolve();
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<void>> JHybridMapSurfaceSpec::hideCallout() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("hideCallout");
     auto __result = method(_javaPart);
     return [&]() {
       auto __promise = Promise<void>::create();

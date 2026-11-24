@@ -29,7 +29,13 @@ data class MapDragEvent(
   val point: MapPoint,
   @DoNotStrip
   @Keep
-  val routeId: String?
+  val routeId: String?,
+  @DoNotStrip
+  @Keep
+  val routeIds: Array<String>,
+  @DoNotStrip
+  @Keep
+  val markerIds: Array<String>
 ) {
   /* primary constructor */
 
@@ -40,6 +46,8 @@ data class MapDragEvent(
       && Objects.deepEquals(this.coordinate, other.coordinate)
       && Objects.deepEquals(this.point, other.point)
       && Objects.deepEquals(this.routeId, other.routeId)
+      && Objects.deepEquals(this.routeIds, other.routeIds)
+      && Objects.deepEquals(this.markerIds, other.markerIds)
   }
 
   override fun hashCode(): Int {
@@ -47,7 +55,9 @@ data class MapDragEvent(
       phase,
       coordinate,
       point,
-      routeId
+      routeId,
+      routeIds,
+      markerIds
     ).contentDeepHashCode()
   }
 
@@ -59,8 +69,8 @@ data class MapDragEvent(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(phase: MapDragPhase, coordinate: Coordinate, point: MapPoint, routeId: String?): MapDragEvent {
-      return MapDragEvent(phase, coordinate, point, routeId)
+    private fun fromCpp(phase: MapDragPhase, coordinate: Coordinate, point: MapPoint, routeId: String?, routeIds: Array<String>, markerIds: Array<String>): MapDragEvent {
+      return MapDragEvent(phase, coordinate, point, routeId, routeIds, markerIds)
     }
   }
 }

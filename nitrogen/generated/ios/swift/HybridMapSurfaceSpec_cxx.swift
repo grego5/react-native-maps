@@ -121,14 +121,37 @@ open class HybridMapSurfaceSpec_cxx {
   }
 
   // Properties
-  public final var features: MapFeatures {
+  public final var markers: bridge.std__vector_MapMarker_ {
     @inline(__always)
     get {
-      return self.__implementation.features
+      return { () -> bridge.std__vector_MapMarker_ in
+        var __vector = bridge.create_std__vector_MapMarker_(self.__implementation.markers.count)
+        for __item in self.__implementation.markers {
+          __vector.push_back(__item)
+        }
+        return __vector
+      }()
     }
     @inline(__always)
     set {
-      self.__implementation.features = newValue
+      self.__implementation.markers = newValue.map({ __item in __item })
+    }
+  }
+  
+  public final var routes: bridge.std__vector_MapRoute_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__vector_MapRoute_ in
+        var __vector = bridge.create_std__vector_MapRoute_(self.__implementation.routes.count)
+        for __item in self.__implementation.routes {
+          __vector.push_back(__item)
+        }
+        return __vector
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.routes = newValue.map({ __item in __item })
     }
   }
   
@@ -140,6 +163,89 @@ open class HybridMapSurfaceSpec_cxx {
     @inline(__always)
     set {
       self.__implementation.provider = margelo.nitro.mapssession.MapProvider(rawValue: newValue)!
+    }
+  }
+  
+  public final var options: bridge.std__optional_MapOptions_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_MapOptions_ in
+        if let __unwrappedValue = self.__implementation.options {
+          return bridge.create_std__optional_MapOptions_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.options = newValue.value
+    }
+  }
+  
+  public final var initialCamera: bridge.std__optional_MapCamera_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_MapCamera_ in
+        if let __unwrappedValue = self.__implementation.initialCamera {
+          return bridge.create_std__optional_MapCamera_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.initialCamera = newValue.value
+    }
+  }
+  
+  public final var initialFit: bridge.std__optional_InitialFit_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_InitialFit_ in
+        if let __unwrappedValue = self.__implementation.initialFit {
+          return bridge.create_std__optional_InitialFit_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.initialFit = newValue.value
+    }
+  }
+  
+  public final var onCameraMove: bridge.std__optional_std__function_void_const_MapCameraEvent_____event______ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_std__function_void_const_MapCameraEvent_____event______ in
+        if let __unwrappedValue = self.__implementation.onCameraMove {
+          return bridge.create_std__optional_std__function_void_const_MapCameraEvent_____event______({ () -> bridge.Func_void_MapCameraEvent in
+            let __closureWrapper = Func_void_MapCameraEvent(__unwrappedValue)
+            return bridge.create_Func_void_MapCameraEvent(__closureWrapper.toUnsafe())
+          }())
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.onCameraMove = { () -> ((_ event: MapCameraEvent) -> Void)? in
+        if bridge.has_value_std__optional_std__function_void_const_MapCameraEvent_____event______(newValue) {
+          let __unwrapped = bridge.get_std__optional_std__function_void_const_MapCameraEvent_____event______(newValue)
+          return { () -> (MapCameraEvent) -> Void in
+            let __wrappedFunction = bridge.wrap_Func_void_MapCameraEvent(__unwrapped)
+            return { (__event: MapCameraEvent) -> Void in
+              __wrappedFunction.call(__event)
+            }
+          }()
+        } else {
+          return nil
+        }
+      }()
     }
   }
   
@@ -239,6 +345,38 @@ open class HybridMapSurfaceSpec_cxx {
     }
   }
   
+  public final var onPoiTap: bridge.std__optional_std__function_void_const_MapPoiTap_____event______ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_std__function_void_const_MapPoiTap_____event______ in
+        if let __unwrappedValue = self.__implementation.onPoiTap {
+          return bridge.create_std__optional_std__function_void_const_MapPoiTap_____event______({ () -> bridge.Func_void_MapPoiTap in
+            let __closureWrapper = Func_void_MapPoiTap(__unwrappedValue)
+            return bridge.create_Func_void_MapPoiTap(__closureWrapper.toUnsafe())
+          }())
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.onPoiTap = { () -> ((_ event: MapPoiTap) -> Void)? in
+        if bridge.has_value_std__optional_std__function_void_const_MapPoiTap_____event______(newValue) {
+          let __unwrapped = bridge.get_std__optional_std__function_void_const_MapPoiTap_____event______(newValue)
+          return { () -> (MapPoiTap) -> Void in
+            let __wrappedFunction = bridge.wrap_Func_void_MapPoiTap(__unwrapped)
+            return { (__event: MapPoiTap) -> Void in
+              __wrappedFunction.call(__event)
+            }
+          }()
+        } else {
+          return nil
+        }
+      }()
+    }
+  }
+  
   public final var pinDragEnabled: bridge.std__optional_bool_ {
     @inline(__always)
     get {
@@ -255,6 +393,47 @@ open class HybridMapSurfaceSpec_cxx {
       self.__implementation.pinDragEnabled = { () -> Bool? in
         if bridge.has_value_std__optional_bool_(newValue) {
           let __unwrapped = bridge.get_std__optional_bool_(newValue)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }()
+    }
+  }
+  
+  public final var pinDragPreview: bridge.std__optional_DragPreview_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_DragPreview_ in
+        if let __unwrappedValue = self.__implementation.pinDragPreview {
+          return bridge.create_std__optional_DragPreview_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.pinDragPreview = newValue.value
+    }
+  }
+  
+  public final var dropRadius: bridge.std__optional_double_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_double_ in
+        if let __unwrappedValue = self.__implementation.dropRadius {
+          return bridge.create_std__optional_double_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.dropRadius = { () -> Double? in
+        if bridge.has_value_std__optional_double_(newValue) {
+          let __unwrapped = bridge.get_std__optional_double_(newValue)
           return __unwrapped
         } else {
           return nil
@@ -297,9 +476,9 @@ open class HybridMapSurfaceSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func setCamera(center: Coordinate, zoom: Double, animated: Bool) -> bridge.Result_std__shared_ptr_Promise_void___ {
+  public final func setCamera(center: Coordinate, zoom: Double, move: bridge.std__optional_CameraMove_) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
-      let __result = try self.__implementation.setCamera(center: center, zoom: zoom, animated: animated)
+      let __result = try self.__implementation.setCamera(center: center, zoom: zoom, move: move.value)
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
@@ -312,6 +491,82 @@ open class HybridMapSurfaceSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getCamera() -> bridge.Result_std__shared_ptr_Promise_MapCamera___ {
+    do {
+      let __result = try self.__implementation.getCamera()
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_MapCamera__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_MapCamera__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_MapCamera__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_MapCamera___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_MapCamera___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func fitCoordinates(coordinates: bridge.std__vector_Coordinate_, fit: bridge.std__optional_CameraFit_) -> bridge.Result_std__shared_ptr_Promise_void___ {
+    do {
+      let __result = try self.__implementation.fitCoordinates(coordinates: coordinates.map({ __item in __item }), fit: fit.value)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve() })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func revealCoordinates(coordinates: bridge.std__vector_Coordinate_, fit: bridge.std__optional_CameraFit_) -> bridge.Result_std__shared_ptr_Promise_CameraReveal___ {
+    do {
+      let __result = try self.__implementation.revealCoordinates(coordinates: coordinates.map({ __item in __item }), fit: fit.value)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_CameraReveal__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_CameraReveal__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_CameraReveal__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_CameraReveal___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_CameraReveal___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func cameraFor(coordinates: bridge.std__vector_Coordinate_, fit: bridge.std__optional_CameraFit_) -> bridge.Result_std__shared_ptr_Promise_MapCamera___ {
+    do {
+      let __result = try self.__implementation.cameraFor(coordinates: coordinates.map({ __item in __item }), fit: fit.value)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_MapCamera__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_MapCamera__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_MapCamera__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_MapCamera___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_MapCamera___(__exceptionPtr)
     }
   }
   
@@ -376,6 +631,63 @@ open class HybridMapSurfaceSpec_cxx {
   public final func cancelDrag() -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
       let __result = try self.__implementation.cancelDrag()
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve() })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func queryFeatures(point: MapPoint, radius: Double) -> bridge.Result_std__shared_ptr_Promise_MapFeatureHits___ {
+    do {
+      let __result = try self.__implementation.queryFeatures(point: point, radius: radius)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_MapFeatureHits__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_MapFeatureHits__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_MapFeatureHits__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_MapFeatureHits___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_MapFeatureHits___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func showCallout(markerId: std.string) -> bridge.Result_std__shared_ptr_Promise_void___ {
+    do {
+      let __result = try self.__implementation.showCallout(markerId: String(markerId))
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve() })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func hideCallout() -> bridge.Result_std__shared_ptr_Promise_void___ {
+    do {
+      let __result = try self.__implementation.hideCallout()
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)

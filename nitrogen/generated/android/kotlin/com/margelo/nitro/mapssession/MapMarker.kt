@@ -29,7 +29,16 @@ data class MapMarker(
   val title: String?,
   @DoNotStrip
   @Keep
-  val image: MarkerImage?
+  val description: String?,
+  @DoNotStrip
+  @Keep
+  val image: MarkerImage?,
+  @DoNotStrip
+  @Keep
+  val anchor: MapPoint?,
+  @DoNotStrip
+  @Keep
+  val zIndex: Double?
 ) {
   /* primary constructor */
 
@@ -39,7 +48,10 @@ data class MapMarker(
     return Objects.deepEquals(this.id, other.id)
       && Objects.deepEquals(this.coordinate, other.coordinate)
       && Objects.deepEquals(this.title, other.title)
+      && Objects.deepEquals(this.description, other.description)
       && Objects.deepEquals(this.image, other.image)
+      && Objects.deepEquals(this.anchor, other.anchor)
+      && Objects.deepEquals(this.zIndex, other.zIndex)
   }
 
   override fun hashCode(): Int {
@@ -47,7 +59,10 @@ data class MapMarker(
       id,
       coordinate,
       title,
-      image
+      description,
+      image,
+      anchor,
+      zIndex
     ).contentDeepHashCode()
   }
 
@@ -59,8 +74,8 @@ data class MapMarker(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(id: String, coordinate: Coordinate, title: String?, image: MarkerImage?): MapMarker {
-      return MapMarker(id, coordinate, title, image)
+    private fun fromCpp(id: String, coordinate: Coordinate, title: String?, description: String?, image: MarkerImage?, anchor: MapPoint?, zIndex: Double?): MapMarker {
+      return MapMarker(id, coordinate, title, description, image, anchor, zIndex)
     }
   }
 }

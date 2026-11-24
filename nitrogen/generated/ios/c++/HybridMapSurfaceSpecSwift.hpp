@@ -12,45 +12,81 @@
 // Forward declaration of `HybridMapSurfaceSpec_cxx` to properly resolve imports.
 namespace ReactNativeMaps { class HybridMapSurfaceSpec_cxx; }
 
-// Forward declaration of `MapFeatures` to properly resolve imports.
-namespace margelo::nitro::mapssession { struct MapFeatures; }
 // Forward declaration of `MapMarker` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapMarker; }
 // Forward declaration of `Coordinate` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct Coordinate; }
 // Forward declaration of `MarkerImage` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MarkerImage; }
+// Forward declaration of `MapPoint` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapPoint; }
 // Forward declaration of `MapRoute` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapRoute; }
 // Forward declaration of `RouteDrag` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct RouteDrag; }
+// Forward declaration of `DragPreview` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct DragPreview; }
 // Forward declaration of `MapProvider` to properly resolve imports.
 namespace margelo::nitro::mapssession { enum class MapProvider; }
+// Forward declaration of `MapOptions` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapOptions; }
+// Forward declaration of `MapType` to properly resolve imports.
+namespace margelo::nitro::mapssession { enum class MapType; }
+// Forward declaration of `MapCamera` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapCamera; }
+// Forward declaration of `InitialFit` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct InitialFit; }
+// Forward declaration of `EdgePadding` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct EdgePadding; }
+// Forward declaration of `MapCameraEvent` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapCameraEvent; }
+// Forward declaration of `MapCameraPhase` to properly resolve imports.
+namespace margelo::nitro::mapssession { enum class MapCameraPhase; }
 // Forward declaration of `MapTap` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapTap; }
-// Forward declaration of `MapPoint` to properly resolve imports.
-namespace margelo::nitro::mapssession { struct MapPoint; }
+// Forward declaration of `MapPoiTap` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapPoiTap; }
 // Forward declaration of `MapDragEvent` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapDragEvent; }
 // Forward declaration of `MapDragPhase` to properly resolve imports.
 namespace margelo::nitro::mapssession { enum class MapDragPhase; }
+// Forward declaration of `CameraMove` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct CameraMove; }
+// Forward declaration of `CameraFit` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct CameraFit; }
+// Forward declaration of `CameraReveal` to properly resolve imports.
+namespace margelo::nitro::mapssession { enum class CameraReveal; }
+// Forward declaration of `MapFeatureHits` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapFeatureHits; }
 
-#include "MapFeatures.hpp"
 #include "MapMarker.hpp"
 #include <vector>
 #include <string>
 #include "Coordinate.hpp"
 #include <optional>
 #include "MarkerImage.hpp"
+#include "MapPoint.hpp"
 #include "MapRoute.hpp"
 #include "RouteDrag.hpp"
+#include "DragPreview.hpp"
 #include "MapProvider.hpp"
+#include "MapOptions.hpp"
+#include "MapType.hpp"
+#include "MapCamera.hpp"
+#include "InitialFit.hpp"
+#include "EdgePadding.hpp"
+#include "MapCameraEvent.hpp"
 #include <functional>
+#include "MapCameraPhase.hpp"
 #include "MapTap.hpp"
-#include "MapPoint.hpp"
+#include "MapPoiTap.hpp"
 #include "MapDragEvent.hpp"
 #include "MapDragPhase.hpp"
 #include <NitroModules/Promise.hpp>
+#include "CameraMove.hpp"
+#include "CameraFit.hpp"
+#include "CameraReveal.hpp"
+#include "MapFeatureHits.hpp"
 
 #include "ReactNativeMaps-Swift-Cxx-Umbrella.hpp"
 
@@ -98,11 +134,19 @@ namespace margelo::nitro::mapssession {
 
   public:
     // Properties
-    inline MapFeatures getFeatures() noexcept override {
-      return _swiftPart.getFeatures();
+    inline std::vector<MapMarker> getMarkers() noexcept override {
+      auto __result = _swiftPart.getMarkers();
+      return __result;
     }
-    inline void setFeatures(const MapFeatures& features) noexcept override {
-      _swiftPart.setFeatures(std::forward<decltype(features)>(features));
+    inline void setMarkers(const std::vector<MapMarker>& markers) noexcept override {
+      _swiftPart.setMarkers(markers);
+    }
+    inline std::vector<MapRoute> getRoutes() noexcept override {
+      auto __result = _swiftPart.getRoutes();
+      return __result;
+    }
+    inline void setRoutes(const std::vector<MapRoute>& routes) noexcept override {
+      _swiftPart.setRoutes(routes);
     }
     inline MapProvider getProvider() noexcept override {
       auto __result = _swiftPart.getProvider();
@@ -110,6 +154,34 @@ namespace margelo::nitro::mapssession {
     }
     inline void setProvider(MapProvider provider) noexcept override {
       _swiftPart.setProvider(static_cast<int>(provider));
+    }
+    inline std::optional<MapOptions> getOptions() noexcept override {
+      auto __result = _swiftPart.getOptions();
+      return __result;
+    }
+    inline void setOptions(const std::optional<MapOptions>& options) noexcept override {
+      _swiftPart.setOptions(options);
+    }
+    inline std::optional<MapCamera> getInitialCamera() noexcept override {
+      auto __result = _swiftPart.getInitialCamera();
+      return __result;
+    }
+    inline void setInitialCamera(const std::optional<MapCamera>& initialCamera) noexcept override {
+      _swiftPart.setInitialCamera(initialCamera);
+    }
+    inline std::optional<InitialFit> getInitialFit() noexcept override {
+      auto __result = _swiftPart.getInitialFit();
+      return __result;
+    }
+    inline void setInitialFit(const std::optional<InitialFit>& initialFit) noexcept override {
+      _swiftPart.setInitialFit(initialFit);
+    }
+    inline std::optional<std::function<void(const MapCameraEvent& /* event */)>> getOnCameraMove() noexcept override {
+      auto __result = _swiftPart.getOnCameraMove();
+      return __result;
+    }
+    inline void setOnCameraMove(const std::optional<std::function<void(const MapCameraEvent& /* event */)>>& onCameraMove) noexcept override {
+      _swiftPart.setOnCameraMove(onCameraMove);
     }
     inline std::optional<std::function<void()>> getOnReady() noexcept override {
       auto __result = _swiftPart.getOnReady();
@@ -132,12 +204,33 @@ namespace margelo::nitro::mapssession {
     inline void setOnTap(const std::optional<std::function<void(const MapTap& /* event */)>>& onTap) noexcept override {
       _swiftPart.setOnTap(onTap);
     }
+    inline std::optional<std::function<void(const MapPoiTap& /* event */)>> getOnPoiTap() noexcept override {
+      auto __result = _swiftPart.getOnPoiTap();
+      return __result;
+    }
+    inline void setOnPoiTap(const std::optional<std::function<void(const MapPoiTap& /* event */)>>& onPoiTap) noexcept override {
+      _swiftPart.setOnPoiTap(onPoiTap);
+    }
     inline std::optional<bool> getPinDragEnabled() noexcept override {
       auto __result = _swiftPart.getPinDragEnabled();
       return __result;
     }
     inline void setPinDragEnabled(std::optional<bool> pinDragEnabled) noexcept override {
       _swiftPart.setPinDragEnabled(pinDragEnabled);
+    }
+    inline std::optional<DragPreview> getPinDragPreview() noexcept override {
+      auto __result = _swiftPart.getPinDragPreview();
+      return __result;
+    }
+    inline void setPinDragPreview(const std::optional<DragPreview>& pinDragPreview) noexcept override {
+      _swiftPart.setPinDragPreview(pinDragPreview);
+    }
+    inline std::optional<double> getDropRadius() noexcept override {
+      auto __result = _swiftPart.getDropRadius();
+      return __result;
+    }
+    inline void setDropRadius(std::optional<double> dropRadius) noexcept override {
+      _swiftPart.setDropRadius(dropRadius);
     }
     inline std::optional<std::function<void(const MapDragEvent& /* event */)>> getOnDrag() noexcept override {
       auto __result = _swiftPart.getOnDrag();
@@ -149,8 +242,40 @@ namespace margelo::nitro::mapssession {
 
   public:
     // Methods
-    inline std::shared_ptr<Promise<void>> setCamera(const Coordinate& center, double zoom, bool animated) override {
-      auto __result = _swiftPart.setCamera(std::forward<decltype(center)>(center), std::forward<decltype(zoom)>(zoom), std::forward<decltype(animated)>(animated));
+    inline std::shared_ptr<Promise<void>> setCamera(const Coordinate& center, double zoom, const std::optional<CameraMove>& move) override {
+      auto __result = _swiftPart.setCamera(std::forward<decltype(center)>(center), std::forward<decltype(zoom)>(zoom), move);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<MapCamera>> getCamera() override {
+      auto __result = _swiftPart.getCamera();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<void>> fitCoordinates(const std::vector<Coordinate>& coordinates, const std::optional<CameraFit>& fit) override {
+      auto __result = _swiftPart.fitCoordinates(coordinates, fit);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<CameraReveal>> revealCoordinates(const std::vector<Coordinate>& coordinates, const std::optional<CameraFit>& fit) override {
+      auto __result = _swiftPart.revealCoordinates(coordinates, fit);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<MapCamera>> cameraFor(const std::vector<Coordinate>& coordinates, const std::optional<CameraFit>& fit) override {
+      auto __result = _swiftPart.cameraFor(coordinates, fit);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -183,6 +308,30 @@ namespace margelo::nitro::mapssession {
     }
     inline std::shared_ptr<Promise<void>> cancelDrag() override {
       auto __result = _swiftPart.cancelDrag();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<MapFeatureHits>> queryFeatures(const MapPoint& point, double radius) override {
+      auto __result = _swiftPart.queryFeatures(std::forward<decltype(point)>(point), std::forward<decltype(radius)>(radius));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<void>> showCallout(const std::string& markerId) override {
+      auto __result = _swiftPart.showCallout(markerId);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<void>> hideCallout() override {
+      auto __result = _swiftPart.hideCallout();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

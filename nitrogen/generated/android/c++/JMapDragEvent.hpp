@@ -18,6 +18,7 @@
 #include "MapPoint.hpp"
 #include <optional>
 #include <string>
+#include <vector>
 
 namespace margelo::nitro::mapssession {
 
@@ -46,11 +47,35 @@ namespace margelo::nitro::mapssession {
       jni::local_ref<JMapPoint> point = this->getFieldValue(fieldPoint);
       static const auto fieldRouteId = clazz->getField<jni::JString>("routeId");
       jni::local_ref<jni::JString> routeId = this->getFieldValue(fieldRouteId);
+      static const auto fieldRouteIds = clazz->getField<jni::JArrayClass<jni::JString>>("routeIds");
+      jni::local_ref<jni::JArrayClass<jni::JString>> routeIds = this->getFieldValue(fieldRouteIds);
+      static const auto fieldMarkerIds = clazz->getField<jni::JArrayClass<jni::JString>>("markerIds");
+      jni::local_ref<jni::JArrayClass<jni::JString>> markerIds = this->getFieldValue(fieldMarkerIds);
       return MapDragEvent(
         phase->toCpp(),
         coordinate->toCpp(),
         point->toCpp(),
-        routeId != nullptr ? std::make_optional(routeId->toStdString()) : std::nullopt
+        routeId != nullptr ? std::make_optional(routeId->toStdString()) : std::nullopt,
+        [&](auto&& __input) {
+          size_t __size = __input->size();
+          std::vector<std::string> __vector;
+          __vector.reserve(__size);
+          for (size_t __i = 0; __i < __size; __i++) {
+            auto __element = __input->getElement(__i);
+            __vector.push_back(__element->toStdString());
+          }
+          return __vector;
+        }(routeIds),
+        [&](auto&& __input) {
+          size_t __size = __input->size();
+          std::vector<std::string> __vector;
+          __vector.reserve(__size);
+          for (size_t __i = 0; __i < __size; __i++) {
+            auto __element = __input->getElement(__i);
+            __vector.push_back(__element->toStdString());
+          }
+          return __vector;
+        }(markerIds)
       );
     }
 
@@ -60,7 +85,7 @@ namespace margelo::nitro::mapssession {
      */
     [[maybe_unused]]
     static jni::local_ref<JMapDragEvent::javaobject> fromCpp(const MapDragEvent& value) {
-      using JSignature = JMapDragEvent(jni::alias_ref<JMapDragPhase>, jni::alias_ref<JCoordinate>, jni::alias_ref<JMapPoint>, jni::alias_ref<jni::JString>);
+      using JSignature = JMapDragEvent(jni::alias_ref<JMapDragPhase>, jni::alias_ref<JCoordinate>, jni::alias_ref<JMapPoint>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JArrayClass<jni::JString>>, jni::alias_ref<jni::JArrayClass<jni::JString>>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
@@ -68,7 +93,27 @@ namespace margelo::nitro::mapssession {
         JMapDragPhase::fromCpp(value.phase),
         JCoordinate::fromCpp(value.coordinate),
         JMapPoint::fromCpp(value.point),
-        value.routeId.has_value() ? jni::make_jstring(value.routeId.value()) : nullptr
+        value.routeId.has_value() ? jni::make_jstring(value.routeId.value()) : nullptr,
+        [&](auto&& __input) {
+          size_t __size = __input.size();
+          jni::local_ref<jni::JArrayClass<jni::JString>> __array = jni::JArrayClass<jni::JString>::newArray(__size);
+          for (size_t __i = 0; __i < __size; __i++) {
+            const auto& __element = __input[__i];
+            auto __elementJni = jni::make_jstring(__element);
+            __array->setElement(__i, *__elementJni);
+          }
+          return __array;
+        }(value.routeIds),
+        [&](auto&& __input) {
+          size_t __size = __input.size();
+          jni::local_ref<jni::JArrayClass<jni::JString>> __array = jni::JArrayClass<jni::JString>::newArray(__size);
+          for (size_t __i = 0; __i < __size; __i++) {
+            const auto& __element = __input[__i];
+            auto __elementJni = jni::make_jstring(__element);
+            __array->setElement(__i, *__elementJni);
+          }
+          return __array;
+        }(value.markerIds)
       );
     }
   };

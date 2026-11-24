@@ -18,18 +18,29 @@ public extension RouteDrag {
   /**
    * Create a new instance of `RouteDrag`.
    */
-  init(anchors: [Coordinate]) {
+  init(anchors: [Coordinate], preview: DragPreview?) {
     self.init({ () -> bridge.std__vector_Coordinate_ in
       var __vector = bridge.create_std__vector_Coordinate_(anchors.count)
       for __item in anchors {
         __vector.push_back(__item)
       }
       return __vector
+    }(), { () -> bridge.std__optional_DragPreview_ in
+      if let __unwrappedValue = preview {
+        return bridge.create_std__optional_DragPreview_(__unwrappedValue)
+      } else {
+        return .init()
+      }
     }())
   }
 
   @inline(__always)
   var anchors: [Coordinate] {
     return self.__anchors.map({ __item in __item })
+  }
+  
+  @inline(__always)
+  var preview: DragPreview? {
+    return self.__preview.value
   }
 }

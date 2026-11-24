@@ -40,6 +40,7 @@ namespace margelo::nitro::mapssession { struct MapPoint; }
 #include "MapPoint.hpp"
 #include <string>
 #include <optional>
+#include <vector>
 
 namespace margelo::nitro::mapssession {
 
@@ -52,10 +53,12 @@ namespace margelo::nitro::mapssession {
     Coordinate coordinate     SWIFT_PRIVATE;
     MapPoint point     SWIFT_PRIVATE;
     std::optional<std::string> routeId     SWIFT_PRIVATE;
+    std::vector<std::string> routeIds     SWIFT_PRIVATE;
+    std::vector<std::string> markerIds     SWIFT_PRIVATE;
 
   public:
     MapDragEvent() = default;
-    explicit MapDragEvent(MapDragPhase phase, Coordinate coordinate, MapPoint point, std::optional<std::string> routeId): phase(phase), coordinate(coordinate), point(point), routeId(routeId) {}
+    explicit MapDragEvent(MapDragPhase phase, Coordinate coordinate, MapPoint point, std::optional<std::string> routeId, std::vector<std::string> routeIds, std::vector<std::string> markerIds): phase(phase), coordinate(coordinate), point(point), routeId(routeId), routeIds(routeIds), markerIds(markerIds) {}
 
   public:
     friend bool operator==(const MapDragEvent& lhs, const MapDragEvent& rhs) = default;
@@ -74,7 +77,9 @@ namespace margelo::nitro {
         JSIConverter<margelo::nitro::mapssession::MapDragPhase>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "phase"))),
         JSIConverter<margelo::nitro::mapssession::Coordinate>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "coordinate"))),
         JSIConverter<margelo::nitro::mapssession::MapPoint>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "point"))),
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "routeId")))
+        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "routeId"))),
+        JSIConverter<std::vector<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "routeIds"))),
+        JSIConverter<std::vector<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "markerIds")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::mapssession::MapDragEvent& arg) {
@@ -83,6 +88,8 @@ namespace margelo::nitro {
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "coordinate"), JSIConverter<margelo::nitro::mapssession::Coordinate>::toJSI(runtime, arg.coordinate));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "point"), JSIConverter<margelo::nitro::mapssession::MapPoint>::toJSI(runtime, arg.point));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "routeId"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.routeId));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "routeIds"), JSIConverter<std::vector<std::string>>::toJSI(runtime, arg.routeIds));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "markerIds"), JSIConverter<std::vector<std::string>>::toJSI(runtime, arg.markerIds));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -97,6 +104,8 @@ namespace margelo::nitro {
       if (!JSIConverter<margelo::nitro::mapssession::Coordinate>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "coordinate")))) return false;
       if (!JSIConverter<margelo::nitro::mapssession::MapPoint>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "point")))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "routeId")))) return false;
+      if (!JSIConverter<std::vector<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "routeIds")))) return false;
+      if (!JSIConverter<std::vector<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "markerIds")))) return false;
       return true;
     }
   };

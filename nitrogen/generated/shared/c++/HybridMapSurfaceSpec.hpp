@@ -13,29 +13,63 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `MapFeatures` to properly resolve imports.
-namespace margelo::nitro::mapssession { struct MapFeatures; }
+// Forward declaration of `MapMarker` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapMarker; }
+// Forward declaration of `MapRoute` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapRoute; }
 // Forward declaration of `MapProvider` to properly resolve imports.
 namespace margelo::nitro::mapssession { enum class MapProvider; }
+// Forward declaration of `MapOptions` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapOptions; }
+// Forward declaration of `MapCamera` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapCamera; }
+// Forward declaration of `InitialFit` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct InitialFit; }
+// Forward declaration of `MapCameraEvent` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapCameraEvent; }
 // Forward declaration of `MapTap` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapTap; }
+// Forward declaration of `MapPoiTap` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapPoiTap; }
+// Forward declaration of `DragPreview` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct DragPreview; }
 // Forward declaration of `MapDragEvent` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapDragEvent; }
 // Forward declaration of `Coordinate` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct Coordinate; }
+// Forward declaration of `CameraMove` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct CameraMove; }
+// Forward declaration of `CameraFit` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct CameraFit; }
+// Forward declaration of `CameraReveal` to properly resolve imports.
+namespace margelo::nitro::mapssession { enum class CameraReveal; }
 // Forward declaration of `MapPoint` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapPoint; }
+// Forward declaration of `MapFeatureHits` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapFeatureHits; }
 
-#include "MapFeatures.hpp"
+#include "MapMarker.hpp"
+#include <vector>
+#include "MapRoute.hpp"
 #include "MapProvider.hpp"
-#include <functional>
+#include "MapOptions.hpp"
 #include <optional>
+#include "MapCamera.hpp"
+#include "InitialFit.hpp"
+#include "MapCameraEvent.hpp"
+#include <functional>
 #include "MapTap.hpp"
+#include "MapPoiTap.hpp"
+#include "DragPreview.hpp"
 #include "MapDragEvent.hpp"
 #include <NitroModules/Promise.hpp>
 #include "Coordinate.hpp"
+#include "CameraMove.hpp"
+#include "CameraFit.hpp"
+#include "CameraReveal.hpp"
 #include "MapPoint.hpp"
 #include <string>
+#include "MapFeatureHits.hpp"
 
 namespace margelo::nitro::mapssession {
 
@@ -64,28 +98,51 @@ namespace margelo::nitro::mapssession {
 
     public:
       // Properties
-      virtual MapFeatures getFeatures() = 0;
-      virtual void setFeatures(const MapFeatures& features) = 0;
+      virtual std::vector<MapMarker> getMarkers() = 0;
+      virtual void setMarkers(const std::vector<MapMarker>& markers) = 0;
+      virtual std::vector<MapRoute> getRoutes() = 0;
+      virtual void setRoutes(const std::vector<MapRoute>& routes) = 0;
       virtual MapProvider getProvider() = 0;
       virtual void setProvider(MapProvider provider) = 0;
+      virtual std::optional<MapOptions> getOptions() = 0;
+      virtual void setOptions(const std::optional<MapOptions>& options) = 0;
+      virtual std::optional<MapCamera> getInitialCamera() = 0;
+      virtual void setInitialCamera(const std::optional<MapCamera>& initialCamera) = 0;
+      virtual std::optional<InitialFit> getInitialFit() = 0;
+      virtual void setInitialFit(const std::optional<InitialFit>& initialFit) = 0;
+      virtual std::optional<std::function<void(const MapCameraEvent& /* event */)>> getOnCameraMove() = 0;
+      virtual void setOnCameraMove(const std::optional<std::function<void(const MapCameraEvent& /* event */)>>& onCameraMove) = 0;
       virtual std::optional<std::function<void()>> getOnReady() = 0;
       virtual void setOnReady(const std::optional<std::function<void()>>& onReady) = 0;
       virtual std::optional<std::function<void()>> getOnRendered() = 0;
       virtual void setOnRendered(const std::optional<std::function<void()>>& onRendered) = 0;
       virtual std::optional<std::function<void(const MapTap& /* event */)>> getOnTap() = 0;
       virtual void setOnTap(const std::optional<std::function<void(const MapTap& /* event */)>>& onTap) = 0;
+      virtual std::optional<std::function<void(const MapPoiTap& /* event */)>> getOnPoiTap() = 0;
+      virtual void setOnPoiTap(const std::optional<std::function<void(const MapPoiTap& /* event */)>>& onPoiTap) = 0;
       virtual std::optional<bool> getPinDragEnabled() = 0;
       virtual void setPinDragEnabled(std::optional<bool> pinDragEnabled) = 0;
+      virtual std::optional<DragPreview> getPinDragPreview() = 0;
+      virtual void setPinDragPreview(const std::optional<DragPreview>& pinDragPreview) = 0;
+      virtual std::optional<double> getDropRadius() = 0;
+      virtual void setDropRadius(std::optional<double> dropRadius) = 0;
       virtual std::optional<std::function<void(const MapDragEvent& /* event */)>> getOnDrag() = 0;
       virtual void setOnDrag(const std::optional<std::function<void(const MapDragEvent& /* event */)>>& onDrag) = 0;
 
     public:
       // Methods
-      virtual std::shared_ptr<Promise<void>> setCamera(const Coordinate& center, double zoom, bool animated) = 0;
+      virtual std::shared_ptr<Promise<void>> setCamera(const Coordinate& center, double zoom, const std::optional<CameraMove>& move) = 0;
+      virtual std::shared_ptr<Promise<MapCamera>> getCamera() = 0;
+      virtual std::shared_ptr<Promise<void>> fitCoordinates(const std::vector<Coordinate>& coordinates, const std::optional<CameraFit>& fit) = 0;
+      virtual std::shared_ptr<Promise<CameraReveal>> revealCoordinates(const std::vector<Coordinate>& coordinates, const std::optional<CameraFit>& fit) = 0;
+      virtual std::shared_ptr<Promise<MapCamera>> cameraFor(const std::vector<Coordinate>& coordinates, const std::optional<CameraFit>& fit) = 0;
       virtual std::shared_ptr<Promise<MapPoint>> project(const Coordinate& coordinate) = 0;
       virtual std::shared_ptr<Promise<Coordinate>> unproject(const MapPoint& point) = 0;
       virtual std::shared_ptr<Promise<std::string>> takeSnapshot() = 0;
       virtual std::shared_ptr<Promise<void>> cancelDrag() = 0;
+      virtual std::shared_ptr<Promise<MapFeatureHits>> queryFeatures(const MapPoint& point, double radius) = 0;
+      virtual std::shared_ptr<Promise<void>> showCallout(const std::string& markerId) = 0;
+      virtual std::shared_ptr<Promise<void>> hideCallout() = 0;
 
     protected:
       // Hybrid Setup

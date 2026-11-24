@@ -52,11 +52,12 @@ namespace margelo::nitro::mapssession {
     std::optional<std::string> strokeColor     SWIFT_PRIVATE;
     std::optional<double> strokeWidth     SWIFT_PRIVATE;
     std::optional<double> zIndex     SWIFT_PRIVATE;
+    std::optional<std::vector<double>> dashPattern     SWIFT_PRIVATE;
     std::optional<RouteDrag> drag     SWIFT_PRIVATE;
 
   public:
     MapRoute() = default;
-    explicit MapRoute(std::string id, std::vector<Coordinate> coordinates, std::optional<double> hitSlop, std::optional<std::string> strokeColor, std::optional<double> strokeWidth, std::optional<double> zIndex, std::optional<RouteDrag> drag): id(id), coordinates(coordinates), hitSlop(hitSlop), strokeColor(strokeColor), strokeWidth(strokeWidth), zIndex(zIndex), drag(drag) {}
+    explicit MapRoute(std::string id, std::vector<Coordinate> coordinates, std::optional<double> hitSlop, std::optional<std::string> strokeColor, std::optional<double> strokeWidth, std::optional<double> zIndex, std::optional<std::vector<double>> dashPattern, std::optional<RouteDrag> drag): id(id), coordinates(coordinates), hitSlop(hitSlop), strokeColor(strokeColor), strokeWidth(strokeWidth), zIndex(zIndex), dashPattern(dashPattern), drag(drag) {}
 
   public:
     friend bool operator==(const MapRoute& lhs, const MapRoute& rhs) = default;
@@ -78,6 +79,7 @@ namespace margelo::nitro {
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "strokeColor"))),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "strokeWidth"))),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "zIndex"))),
+        JSIConverter<std::optional<std::vector<double>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "dashPattern"))),
         JSIConverter<std::optional<margelo::nitro::mapssession::RouteDrag>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "drag")))
       );
     }
@@ -89,6 +91,7 @@ namespace margelo::nitro {
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "strokeColor"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.strokeColor));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "strokeWidth"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.strokeWidth));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "zIndex"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.zIndex));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "dashPattern"), JSIConverter<std::optional<std::vector<double>>>::toJSI(runtime, arg.dashPattern));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "drag"), JSIConverter<std::optional<margelo::nitro::mapssession::RouteDrag>>::toJSI(runtime, arg.drag));
       return obj;
     }
@@ -106,6 +109,7 @@ namespace margelo::nitro {
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "strokeColor")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "strokeWidth")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "zIndex")))) return false;
+      if (!JSIConverter<std::optional<std::vector<double>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "dashPattern")))) return false;
       if (!JSIConverter<std::optional<margelo::nitro::mapssession::RouteDrag>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "drag")))) return false;
       return true;
     }

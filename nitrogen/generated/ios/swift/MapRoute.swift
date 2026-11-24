@@ -18,7 +18,7 @@ public extension MapRoute {
   /**
    * Create a new instance of `MapRoute`.
    */
-  init(id: String, coordinates: [Coordinate], hitSlop: Double?, strokeColor: String?, strokeWidth: Double?, zIndex: Double?, drag: RouteDrag?) {
+  init(id: String, coordinates: [Coordinate], hitSlop: Double?, strokeColor: String?, strokeWidth: Double?, zIndex: Double?, dashPattern: [Double]?, drag: RouteDrag?) {
     self.init(std.string(id), { () -> bridge.std__vector_Coordinate_ in
       var __vector = bridge.create_std__vector_Coordinate_(coordinates.count)
       for __item in coordinates {
@@ -46,6 +46,18 @@ public extension MapRoute {
     }(), { () -> bridge.std__optional_double_ in
       if let __unwrappedValue = zIndex {
         return bridge.create_std__optional_double_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_std__vector_double__ in
+      if let __unwrappedValue = dashPattern {
+        return bridge.create_std__optional_std__vector_double__({ () -> bridge.std__vector_double_ in
+          var __vector = bridge.create_std__vector_double_(__unwrappedValue.count)
+          for __item in __unwrappedValue {
+            __vector.push_back(__item)
+          }
+          return __vector
+        }())
       } else {
         return .init()
       }
@@ -110,6 +122,18 @@ public extension MapRoute {
       if bridge.has_value_std__optional_double_(self.__zIndex) {
         let __unwrapped = bridge.get_std__optional_double_(self.__zIndex)
         return __unwrapped
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var dashPattern: [Double]? {
+    return { () -> [Double]? in
+      if bridge.has_value_std__optional_std__vector_double__(self.__dashPattern) {
+        let __unwrapped = bridge.get_std__optional_std__vector_double__(self.__dashPattern)
+        return __unwrapped.map({ __item in __item })
       } else {
         return nil
       }

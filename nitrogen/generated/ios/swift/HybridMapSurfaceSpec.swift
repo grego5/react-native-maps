@@ -10,20 +10,35 @@ import NitroModules
 /// See ``HybridMapSurfaceSpec``
 public protocol HybridMapSurfaceSpec_protocol: HybridObject, HybridView {
   // Properties
-  var features: MapFeatures { get set }
+  var markers: [MapMarker] { get set }
+  var routes: [MapRoute] { get set }
   var provider: MapProvider { get set }
+  var options: MapOptions? { get set }
+  var initialCamera: MapCamera? { get set }
+  var initialFit: InitialFit? { get set }
+  var onCameraMove: ((_ event: MapCameraEvent) -> Void)? { get set }
   var onReady: (() -> Void)? { get set }
   var onRendered: (() -> Void)? { get set }
   var onTap: ((_ event: MapTap) -> Void)? { get set }
+  var onPoiTap: ((_ event: MapPoiTap) -> Void)? { get set }
   var pinDragEnabled: Bool? { get set }
+  var pinDragPreview: DragPreview? { get set }
+  var dropRadius: Double? { get set }
   var onDrag: ((_ event: MapDragEvent) -> Void)? { get set }
 
   // Methods
-  func setCamera(center: Coordinate, zoom: Double, animated: Bool) throws -> Promise<Void>
+  func setCamera(center: Coordinate, zoom: Double, move: CameraMove?) throws -> Promise<Void>
+  func getCamera() throws -> Promise<MapCamera>
+  func fitCoordinates(coordinates: [Coordinate], fit: CameraFit?) throws -> Promise<Void>
+  func revealCoordinates(coordinates: [Coordinate], fit: CameraFit?) throws -> Promise<CameraReveal>
+  func cameraFor(coordinates: [Coordinate], fit: CameraFit?) throws -> Promise<MapCamera>
   func project(coordinate: Coordinate) throws -> Promise<MapPoint>
   func unproject(point: MapPoint) throws -> Promise<Coordinate>
   func takeSnapshot() throws -> Promise<String>
   func cancelDrag() throws -> Promise<Void>
+  func queryFeatures(point: MapPoint, radius: Double) throws -> Promise<MapFeatureHits>
+  func showCallout(markerId: String) throws -> Promise<Void>
+  func hideCallout() throws -> Promise<Void>
 }
 
 public extension HybridMapSurfaceSpec_protocol {

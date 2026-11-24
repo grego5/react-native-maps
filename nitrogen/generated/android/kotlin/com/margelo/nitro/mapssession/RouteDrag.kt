@@ -20,7 +20,10 @@ import java.util.Objects
 data class RouteDrag(
   @DoNotStrip
   @Keep
-  val anchors: Array<Coordinate>
+  val anchors: Array<Coordinate>,
+  @DoNotStrip
+  @Keep
+  val preview: DragPreview?
 ) {
   /* primary constructor */
 
@@ -28,11 +31,13 @@ data class RouteDrag(
     if (this === other) return true
     if (other !is RouteDrag) return false
     return Objects.deepEquals(this.anchors, other.anchors)
+      && Objects.deepEquals(this.preview, other.preview)
   }
 
   override fun hashCode(): Int {
     return arrayOf<Any?>(
-      anchors
+      anchors,
+      preview
     ).contentDeepHashCode()
   }
 
@@ -44,8 +49,8 @@ data class RouteDrag(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(anchors: Array<Coordinate>): RouteDrag {
-      return RouteDrag(anchors)
+    private fun fromCpp(anchors: Array<Coordinate>, preview: DragPreview?): RouteDrag {
+      return RouteDrag(anchors, preview)
     }
   }
 }

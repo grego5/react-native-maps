@@ -30,9 +30,13 @@
 
 // Forward declaration of `Coordinate` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct Coordinate; }
+// Forward declaration of `DragPreview` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct DragPreview; }
 
 #include "Coordinate.hpp"
 #include <vector>
+#include "DragPreview.hpp"
+#include <optional>
 
 namespace margelo::nitro::mapssession {
 
@@ -42,10 +46,11 @@ namespace margelo::nitro::mapssession {
   struct RouteDrag final {
   public:
     std::vector<Coordinate> anchors     SWIFT_PRIVATE;
+    std::optional<DragPreview> preview     SWIFT_PRIVATE;
 
   public:
     RouteDrag() = default;
-    explicit RouteDrag(std::vector<Coordinate> anchors): anchors(anchors) {}
+    explicit RouteDrag(std::vector<Coordinate> anchors, std::optional<DragPreview> preview): anchors(anchors), preview(preview) {}
 
   public:
     friend bool operator==(const RouteDrag& lhs, const RouteDrag& rhs) = default;
@@ -61,12 +66,14 @@ namespace margelo::nitro {
     static inline margelo::nitro::mapssession::RouteDrag fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::mapssession::RouteDrag(
-        JSIConverter<std::vector<margelo::nitro::mapssession::Coordinate>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "anchors")))
+        JSIConverter<std::vector<margelo::nitro::mapssession::Coordinate>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "anchors"))),
+        JSIConverter<std::optional<margelo::nitro::mapssession::DragPreview>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "preview")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::mapssession::RouteDrag& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "anchors"), JSIConverter<std::vector<margelo::nitro::mapssession::Coordinate>>::toJSI(runtime, arg.anchors));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "preview"), JSIConverter<std::optional<margelo::nitro::mapssession::DragPreview>>::toJSI(runtime, arg.preview));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -78,6 +85,7 @@ namespace margelo::nitro {
         return false;
       }
       if (!JSIConverter<std::vector<margelo::nitro::mapssession::Coordinate>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "anchors")))) return false;
+      if (!JSIConverter<std::optional<margelo::nitro::mapssession::DragPreview>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "preview")))) return false;
       return true;
     }
   };

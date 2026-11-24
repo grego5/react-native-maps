@@ -17,11 +17,19 @@
 
 #include <string>
 
-#include "MapFeatures.hpp"
+#include "MapMarker.hpp"
+#include <vector>
+#include "MapRoute.hpp"
 #include "MapProvider.hpp"
-#include <functional>
+#include "MapOptions.hpp"
 #include <optional>
+#include "MapCamera.hpp"
+#include "InitialFit.hpp"
+#include "MapCameraEvent.hpp"
+#include <functional>
 #include "MapTap.hpp"
+#include "MapPoiTap.hpp"
+#include "DragPreview.hpp"
 #include "MapDragEvent.hpp"
 #include <memory>
 #include "HybridMapSurfaceSpec.hpp"
@@ -46,35 +54,59 @@ namespace margelo::nitro::mapssession::views {
                           const react::RawProps& rawProps);
 
   public:
-    nitro::ReactProp<MapFeatures> features;
+    nitro::ReactProp<std::vector<MapMarker>> markers;
+    nitro::ReactProp<std::vector<MapRoute>> routes;
     nitro::ReactProp<MapProvider> provider;
+    nitro::ReactProp<std::optional<MapOptions>> options;
+    nitro::ReactProp<std::optional<MapCamera>> initialCamera;
+    nitro::ReactProp<std::optional<InitialFit>> initialFit;
+    nitro::ReactProp<std::optional<std::function<void(const MapCameraEvent& /* event */)>>> onCameraMove;
     nitro::ReactProp<std::optional<std::function<void()>>> onReady;
     nitro::ReactProp<std::optional<std::function<void()>>> onRendered;
     nitro::ReactProp<std::optional<std::function<void(const MapTap& /* event */)>>> onTap;
+    nitro::ReactProp<std::optional<std::function<void(const MapPoiTap& /* event */)>>> onPoiTap;
     nitro::ReactProp<std::optional<bool>> pinDragEnabled;
+    nitro::ReactProp<std::optional<DragPreview>> pinDragPreview;
+    nitro::ReactProp<std::optional<double>> dropRadius;
     nitro::ReactProp<std::optional<std::function<void(const MapDragEvent& /* event */)>>> onDrag;
     nitro::ReactProp<std::optional<std::function<void(const std::shared_ptr<HybridMapSurfaceSpec>& /* ref */)>>> hybridRef;
 
     [[nodiscard]]
     bool hasSameProps(const HybridMapSurfaceProps& other) const noexcept {
-      return features.hasSameValue(other.features) &&
+      return markers.hasSameValue(other.markers) &&
+             routes.hasSameValue(other.routes) &&
              provider.hasSameValue(other.provider) &&
+             options.hasSameValue(other.options) &&
+             initialCamera.hasSameValue(other.initialCamera) &&
+             initialFit.hasSameValue(other.initialFit) &&
+             onCameraMove.hasSameValue(other.onCameraMove) &&
              onReady.hasSameValue(other.onReady) &&
              onRendered.hasSameValue(other.onRendered) &&
              onTap.hasSameValue(other.onTap) &&
+             onPoiTap.hasSameValue(other.onPoiTap) &&
              pinDragEnabled.hasSameValue(other.pinDragEnabled) &&
+             pinDragPreview.hasSameValue(other.pinDragPreview) &&
+             dropRadius.hasSameValue(other.dropRadius) &&
              onDrag.hasSameValue(other.onDrag) &&
              hybridRef.hasSameValue(other.hybridRef);
     }
 
     [[nodiscard]]
     bool hasAnyProvidedProps() const noexcept {
-      return features.isProvided() ||
+      return markers.isProvided() ||
+             routes.isProvided() ||
              provider.isProvided() ||
+             options.isProvided() ||
+             initialCamera.isProvided() ||
+             initialFit.isProvided() ||
+             onCameraMove.isProvided() ||
              onReady.isProvided() ||
              onRendered.isProvided() ||
              onTap.isProvided() ||
+             onPoiTap.isProvided() ||
              pinDragEnabled.isProvided() ||
+             pinDragPreview.isProvided() ||
+             dropRadius.isProvided() ||
              onDrag.isProvided() ||
              hybridRef.isProvided();
     }

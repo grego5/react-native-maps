@@ -38,6 +38,9 @@ data class MapRoute(
   val zIndex: Double?,
   @DoNotStrip
   @Keep
+  val dashPattern: DoubleArray?,
+  @DoNotStrip
+  @Keep
   val drag: RouteDrag?
 ) {
   /* primary constructor */
@@ -51,6 +54,7 @@ data class MapRoute(
       && Objects.deepEquals(this.strokeColor, other.strokeColor)
       && Objects.deepEquals(this.strokeWidth, other.strokeWidth)
       && Objects.deepEquals(this.zIndex, other.zIndex)
+      && Objects.deepEquals(this.dashPattern, other.dashPattern)
       && Objects.deepEquals(this.drag, other.drag)
   }
 
@@ -62,6 +66,7 @@ data class MapRoute(
       strokeColor,
       strokeWidth,
       zIndex,
+      dashPattern,
       drag
     ).contentDeepHashCode()
   }
@@ -74,8 +79,8 @@ data class MapRoute(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(id: String, coordinates: Array<Coordinate>, hitSlop: Double?, strokeColor: String?, strokeWidth: Double?, zIndex: Double?, drag: RouteDrag?): MapRoute {
-      return MapRoute(id, coordinates, hitSlop, strokeColor, strokeWidth, zIndex, drag)
+    private fun fromCpp(id: String, coordinates: Array<Coordinate>, hitSlop: Double?, strokeColor: String?, strokeWidth: Double?, zIndex: Double?, dashPattern: DoubleArray?, drag: RouteDrag?): MapRoute {
+      return MapRoute(id, coordinates, hitSlop, strokeColor, strokeWidth, zIndex, dashPattern, drag)
     }
   }
 }

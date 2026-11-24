@@ -12,7 +12,9 @@
 
 #include "Coordinate.hpp"
 #include "JCoordinate.hpp"
+#include "JMapPoint.hpp"
 #include "JMarkerImage.hpp"
+#include "MapPoint.hpp"
 #include "MarkerImage.hpp"
 #include <optional>
 #include <string>
@@ -42,13 +44,22 @@ namespace margelo::nitro::mapssession {
       jni::local_ref<JCoordinate> coordinate = this->getFieldValue(fieldCoordinate);
       static const auto fieldTitle = clazz->getField<jni::JString>("title");
       jni::local_ref<jni::JString> title = this->getFieldValue(fieldTitle);
+      static const auto fieldDescription = clazz->getField<jni::JString>("description");
+      jni::local_ref<jni::JString> description = this->getFieldValue(fieldDescription);
       static const auto fieldImage = clazz->getField<JMarkerImage>("image");
       jni::local_ref<JMarkerImage> image = this->getFieldValue(fieldImage);
+      static const auto fieldAnchor = clazz->getField<JMapPoint>("anchor");
+      jni::local_ref<JMapPoint> anchor = this->getFieldValue(fieldAnchor);
+      static const auto fieldZIndex = clazz->getField<jni::JDouble>("zIndex");
+      jni::local_ref<jni::JDouble> zIndex = this->getFieldValue(fieldZIndex);
       return MapMarker(
         id->toStdString(),
         coordinate->toCpp(),
         title != nullptr ? std::make_optional(title->toStdString()) : std::nullopt,
-        image != nullptr ? std::make_optional(image->toCpp()) : std::nullopt
+        description != nullptr ? std::make_optional(description->toStdString()) : std::nullopt,
+        image != nullptr ? std::make_optional(image->toCpp()) : std::nullopt,
+        anchor != nullptr ? std::make_optional(anchor->toCpp()) : std::nullopt,
+        zIndex != nullptr ? std::make_optional(zIndex->value()) : std::nullopt
       );
     }
 
@@ -58,7 +69,7 @@ namespace margelo::nitro::mapssession {
      */
     [[maybe_unused]]
     static jni::local_ref<JMapMarker::javaobject> fromCpp(const MapMarker& value) {
-      using JSignature = JMapMarker(jni::alias_ref<jni::JString>, jni::alias_ref<JCoordinate>, jni::alias_ref<jni::JString>, jni::alias_ref<JMarkerImage>);
+      using JSignature = JMapMarker(jni::alias_ref<jni::JString>, jni::alias_ref<JCoordinate>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<JMarkerImage>, jni::alias_ref<JMapPoint>, jni::alias_ref<jni::JDouble>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
@@ -66,7 +77,10 @@ namespace margelo::nitro::mapssession {
         jni::make_jstring(value.id),
         JCoordinate::fromCpp(value.coordinate),
         value.title.has_value() ? jni::make_jstring(value.title.value()) : nullptr,
-        value.image.has_value() ? JMarkerImage::fromCpp(value.image.value()) : nullptr
+        value.description.has_value() ? jni::make_jstring(value.description.value()) : nullptr,
+        value.image.has_value() ? JMarkerImage::fromCpp(value.image.value()) : nullptr,
+        value.anchor.has_value() ? JMapPoint::fromCpp(value.anchor.value()) : nullptr,
+        value.zIndex.has_value() ? jni::JDouble::valueOf(value.zIndex.value()) : nullptr
       );
     }
   };

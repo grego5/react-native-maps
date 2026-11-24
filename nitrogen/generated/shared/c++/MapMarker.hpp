@@ -32,11 +32,14 @@
 namespace margelo::nitro::mapssession { struct Coordinate; }
 // Forward declaration of `MarkerImage` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MarkerImage; }
+// Forward declaration of `MapPoint` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapPoint; }
 
 #include <string>
 #include "Coordinate.hpp"
 #include <optional>
 #include "MarkerImage.hpp"
+#include "MapPoint.hpp"
 
 namespace margelo::nitro::mapssession {
 
@@ -48,11 +51,14 @@ namespace margelo::nitro::mapssession {
     std::string id     SWIFT_PRIVATE;
     Coordinate coordinate     SWIFT_PRIVATE;
     std::optional<std::string> title     SWIFT_PRIVATE;
+    std::optional<std::string> description     SWIFT_PRIVATE;
     std::optional<MarkerImage> image     SWIFT_PRIVATE;
+    std::optional<MapPoint> anchor     SWIFT_PRIVATE;
+    std::optional<double> zIndex     SWIFT_PRIVATE;
 
   public:
     MapMarker() = default;
-    explicit MapMarker(std::string id, Coordinate coordinate, std::optional<std::string> title, std::optional<MarkerImage> image): id(id), coordinate(coordinate), title(title), image(image) {}
+    explicit MapMarker(std::string id, Coordinate coordinate, std::optional<std::string> title, std::optional<std::string> description, std::optional<MarkerImage> image, std::optional<MapPoint> anchor, std::optional<double> zIndex): id(id), coordinate(coordinate), title(title), description(description), image(image), anchor(anchor), zIndex(zIndex) {}
 
   public:
     friend bool operator==(const MapMarker& lhs, const MapMarker& rhs) = default;
@@ -71,7 +77,10 @@ namespace margelo::nitro {
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "id"))),
         JSIConverter<margelo::nitro::mapssession::Coordinate>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "coordinate"))),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "title"))),
-        JSIConverter<std::optional<margelo::nitro::mapssession::MarkerImage>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "image")))
+        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "description"))),
+        JSIConverter<std::optional<margelo::nitro::mapssession::MarkerImage>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "image"))),
+        JSIConverter<std::optional<margelo::nitro::mapssession::MapPoint>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "anchor"))),
+        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "zIndex")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::mapssession::MapMarker& arg) {
@@ -79,7 +88,10 @@ namespace margelo::nitro {
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "id"), JSIConverter<std::string>::toJSI(runtime, arg.id));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "coordinate"), JSIConverter<margelo::nitro::mapssession::Coordinate>::toJSI(runtime, arg.coordinate));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "title"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.title));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "description"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.description));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "image"), JSIConverter<std::optional<margelo::nitro::mapssession::MarkerImage>>::toJSI(runtime, arg.image));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "anchor"), JSIConverter<std::optional<margelo::nitro::mapssession::MapPoint>>::toJSI(runtime, arg.anchor));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "zIndex"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.zIndex));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -93,7 +105,10 @@ namespace margelo::nitro {
       if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "id")))) return false;
       if (!JSIConverter<margelo::nitro::mapssession::Coordinate>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "coordinate")))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "title")))) return false;
+      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "description")))) return false;
       if (!JSIConverter<std::optional<margelo::nitro::mapssession::MarkerImage>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "image")))) return false;
+      if (!JSIConverter<std::optional<margelo::nitro::mapssession::MapPoint>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "anchor")))) return false;
+      if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "zIndex")))) return false;
       return true;
     }
   };

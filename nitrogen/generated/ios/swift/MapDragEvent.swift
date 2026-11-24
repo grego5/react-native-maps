@@ -18,13 +18,25 @@ public extension MapDragEvent {
   /**
    * Create a new instance of `MapDragEvent`.
    */
-  init(phase: MapDragPhase, coordinate: Coordinate, point: MapPoint, routeId: String?) {
+  init(phase: MapDragPhase, coordinate: Coordinate, point: MapPoint, routeId: String?, routeIds: [String], markerIds: [String]) {
     self.init(phase, coordinate, point, { () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = routeId {
         return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
       } else {
         return .init()
       }
+    }(), { () -> bridge.std__vector_std__string_ in
+      var __vector = bridge.create_std__vector_std__string_(routeIds.count)
+      for __item in routeIds {
+        __vector.push_back(std.string(__item))
+      }
+      return __vector
+    }(), { () -> bridge.std__vector_std__string_ in
+      var __vector = bridge.create_std__vector_std__string_(markerIds.count)
+      for __item in markerIds {
+        __vector.push_back(std.string(__item))
+      }
+      return __vector
     }())
   }
 
@@ -53,5 +65,15 @@ public extension MapDragEvent {
         return nil
       }
     }()
+  }
+  
+  @inline(__always)
+  var routeIds: [String] {
+    return self.__routeIds.map({ __item in String(__item) })
+  }
+  
+  @inline(__always)
+  var markerIds: [String] {
+    return self.__markerIds.map({ __item in String(__item) })
   }
 }

@@ -8,18 +8,40 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `CameraFit` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct CameraFit; }
+// Forward declaration of `CameraMove` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct CameraMove; }
+// Forward declaration of `CameraReveal` to properly resolve imports.
+namespace margelo::nitro::mapssession { enum class CameraReveal; }
 // Forward declaration of `Coordinate` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct Coordinate; }
+// Forward declaration of `DragPreview` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct DragPreview; }
+// Forward declaration of `EdgePadding` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct EdgePadding; }
 // Forward declaration of `HybridMapSurfaceSpec` to properly resolve imports.
 namespace margelo::nitro::mapssession { class HybridMapSurfaceSpec; }
+// Forward declaration of `InitialFit` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct InitialFit; }
+// Forward declaration of `MapCameraEvent` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapCameraEvent; }
+// Forward declaration of `MapCameraPhase` to properly resolve imports.
+namespace margelo::nitro::mapssession { enum class MapCameraPhase; }
+// Forward declaration of `MapCamera` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapCamera; }
 // Forward declaration of `MapDragEvent` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapDragEvent; }
 // Forward declaration of `MapDragPhase` to properly resolve imports.
 namespace margelo::nitro::mapssession { enum class MapDragPhase; }
-// Forward declaration of `MapFeatures` to properly resolve imports.
-namespace margelo::nitro::mapssession { struct MapFeatures; }
+// Forward declaration of `MapFeatureHits` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapFeatureHits; }
 // Forward declaration of `MapMarker` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapMarker; }
+// Forward declaration of `MapOptions` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapOptions; }
+// Forward declaration of `MapPoiTap` to properly resolve imports.
+namespace margelo::nitro::mapssession { struct MapPoiTap; }
 // Forward declaration of `MapPoint` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapPoint; }
 // Forward declaration of `MapProvider` to properly resolve imports.
@@ -28,22 +50,36 @@ namespace margelo::nitro::mapssession { enum class MapProvider; }
 namespace margelo::nitro::mapssession { struct MapRoute; }
 // Forward declaration of `MapTap` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MapTap; }
+// Forward declaration of `MapType` to properly resolve imports.
+namespace margelo::nitro::mapssession { enum class MapType; }
 // Forward declaration of `MarkerImage` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct MarkerImage; }
 // Forward declaration of `RouteDrag` to properly resolve imports.
 namespace margelo::nitro::mapssession { struct RouteDrag; }
 
 // Include C++ defined types
+#include "CameraFit.hpp"
+#include "CameraMove.hpp"
+#include "CameraReveal.hpp"
 #include "Coordinate.hpp"
+#include "DragPreview.hpp"
+#include "EdgePadding.hpp"
 #include "HybridMapSurfaceSpec.hpp"
+#include "InitialFit.hpp"
+#include "MapCamera.hpp"
+#include "MapCameraEvent.hpp"
+#include "MapCameraPhase.hpp"
 #include "MapDragEvent.hpp"
 #include "MapDragPhase.hpp"
-#include "MapFeatures.hpp"
+#include "MapFeatureHits.hpp"
 #include "MapMarker.hpp"
+#include "MapOptions.hpp"
+#include "MapPoiTap.hpp"
 #include "MapPoint.hpp"
 #include "MapProvider.hpp"
 #include "MapRoute.hpp"
 #include "MapTap.hpp"
+#include "MapType.hpp"
 #include "MarkerImage.hpp"
 #include "RouteDrag.hpp"
 #include <NitroModules/Promise.hpp>

@@ -14,25 +14,48 @@ namespace margelo::nitro::mapssession {
     HybridObject::loadHybridMethods();
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
-      prototype.registerHybridGetter("features", &HybridMapSurfaceSpec::getFeatures);
-      prototype.registerHybridSetter("features", &HybridMapSurfaceSpec::setFeatures);
+      prototype.registerHybridGetter("markers", &HybridMapSurfaceSpec::getMarkers);
+      prototype.registerHybridSetter("markers", &HybridMapSurfaceSpec::setMarkers);
+      prototype.registerHybridGetter("routes", &HybridMapSurfaceSpec::getRoutes);
+      prototype.registerHybridSetter("routes", &HybridMapSurfaceSpec::setRoutes);
       prototype.registerHybridGetter("provider", &HybridMapSurfaceSpec::getProvider);
       prototype.registerHybridSetter("provider", &HybridMapSurfaceSpec::setProvider);
+      prototype.registerHybridGetter("options", &HybridMapSurfaceSpec::getOptions);
+      prototype.registerHybridSetter("options", &HybridMapSurfaceSpec::setOptions);
+      prototype.registerHybridGetter("initialCamera", &HybridMapSurfaceSpec::getInitialCamera);
+      prototype.registerHybridSetter("initialCamera", &HybridMapSurfaceSpec::setInitialCamera);
+      prototype.registerHybridGetter("initialFit", &HybridMapSurfaceSpec::getInitialFit);
+      prototype.registerHybridSetter("initialFit", &HybridMapSurfaceSpec::setInitialFit);
+      prototype.registerHybridGetter("onCameraMove", &HybridMapSurfaceSpec::getOnCameraMove);
+      prototype.registerHybridSetter("onCameraMove", &HybridMapSurfaceSpec::setOnCameraMove);
       prototype.registerHybridGetter("onReady", &HybridMapSurfaceSpec::getOnReady);
       prototype.registerHybridSetter("onReady", &HybridMapSurfaceSpec::setOnReady);
       prototype.registerHybridGetter("onRendered", &HybridMapSurfaceSpec::getOnRendered);
       prototype.registerHybridSetter("onRendered", &HybridMapSurfaceSpec::setOnRendered);
       prototype.registerHybridGetter("onTap", &HybridMapSurfaceSpec::getOnTap);
       prototype.registerHybridSetter("onTap", &HybridMapSurfaceSpec::setOnTap);
+      prototype.registerHybridGetter("onPoiTap", &HybridMapSurfaceSpec::getOnPoiTap);
+      prototype.registerHybridSetter("onPoiTap", &HybridMapSurfaceSpec::setOnPoiTap);
       prototype.registerHybridGetter("pinDragEnabled", &HybridMapSurfaceSpec::getPinDragEnabled);
       prototype.registerHybridSetter("pinDragEnabled", &HybridMapSurfaceSpec::setPinDragEnabled);
+      prototype.registerHybridGetter("pinDragPreview", &HybridMapSurfaceSpec::getPinDragPreview);
+      prototype.registerHybridSetter("pinDragPreview", &HybridMapSurfaceSpec::setPinDragPreview);
+      prototype.registerHybridGetter("dropRadius", &HybridMapSurfaceSpec::getDropRadius);
+      prototype.registerHybridSetter("dropRadius", &HybridMapSurfaceSpec::setDropRadius);
       prototype.registerHybridGetter("onDrag", &HybridMapSurfaceSpec::getOnDrag);
       prototype.registerHybridSetter("onDrag", &HybridMapSurfaceSpec::setOnDrag);
       prototype.registerHybridMethod("setCamera", &HybridMapSurfaceSpec::setCamera);
+      prototype.registerHybridMethod("getCamera", &HybridMapSurfaceSpec::getCamera);
+      prototype.registerHybridMethod("fitCoordinates", &HybridMapSurfaceSpec::fitCoordinates);
+      prototype.registerHybridMethod("revealCoordinates", &HybridMapSurfaceSpec::revealCoordinates);
+      prototype.registerHybridMethod("cameraFor", &HybridMapSurfaceSpec::cameraFor);
       prototype.registerHybridMethod("project", &HybridMapSurfaceSpec::project);
       prototype.registerHybridMethod("unproject", &HybridMapSurfaceSpec::unproject);
       prototype.registerHybridMethod("takeSnapshot", &HybridMapSurfaceSpec::takeSnapshot);
       prototype.registerHybridMethod("cancelDrag", &HybridMapSurfaceSpec::cancelDrag);
+      prototype.registerHybridMethod("queryFeatures", &HybridMapSurfaceSpec::queryFeatures);
+      prototype.registerHybridMethod("showCallout", &HybridMapSurfaceSpec::showCallout);
+      prototype.registerHybridMethod("hideCallout", &HybridMapSurfaceSpec::hideCallout);
     });
   }
 

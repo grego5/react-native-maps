@@ -98,17 +98,47 @@ using namespace margelo::nitro::mapssession::views;
   if (hasTransactionPropChanges) {
     swiftPart.beforeUpdate();
 
-    // features: struct
+    // markers: array
     if (oldViewProps == nullptr
-          ? newViewProps.features.isProvided()
-          : !newViewProps.features.hasSameValue(oldViewProps->features)) {
-      swiftPart.setFeatures(newViewProps.features.get());
+          ? newViewProps.markers.isProvided()
+          : !newViewProps.markers.hasSameValue(oldViewProps->markers)) {
+      swiftPart.setMarkers(newViewProps.markers.get());
+    }
+    // routes: array
+    if (oldViewProps == nullptr
+          ? newViewProps.routes.isProvided()
+          : !newViewProps.routes.hasSameValue(oldViewProps->routes)) {
+      swiftPart.setRoutes(newViewProps.routes.get());
     }
     // provider: enum
     if (oldViewProps == nullptr
           ? newViewProps.provider.isProvided()
           : !newViewProps.provider.hasSameValue(oldViewProps->provider)) {
       swiftPart.setProvider(static_cast<int>(newViewProps.provider.get()));
+    }
+    // options: optional
+    if (oldViewProps == nullptr
+          ? newViewProps.options.isProvided()
+          : !newViewProps.options.hasSameValue(oldViewProps->options)) {
+      swiftPart.setOptions(newViewProps.options.get());
+    }
+    // initialCamera: optional
+    if (oldViewProps == nullptr
+          ? newViewProps.initialCamera.isProvided()
+          : !newViewProps.initialCamera.hasSameValue(oldViewProps->initialCamera)) {
+      swiftPart.setInitialCamera(newViewProps.initialCamera.get());
+    }
+    // initialFit: optional
+    if (oldViewProps == nullptr
+          ? newViewProps.initialFit.isProvided()
+          : !newViewProps.initialFit.hasSameValue(oldViewProps->initialFit)) {
+      swiftPart.setInitialFit(newViewProps.initialFit.get());
+    }
+    // onCameraMove: optional
+    if (oldViewProps == nullptr
+          ? newViewProps.onCameraMove.isProvided()
+          : !newViewProps.onCameraMove.hasSameValue(oldViewProps->onCameraMove)) {
+      swiftPart.setOnCameraMove(newViewProps.onCameraMove.get());
     }
     // onReady: optional
     if (oldViewProps == nullptr
@@ -128,11 +158,29 @@ using namespace margelo::nitro::mapssession::views;
           : !newViewProps.onTap.hasSameValue(oldViewProps->onTap)) {
       swiftPart.setOnTap(newViewProps.onTap.get());
     }
+    // onPoiTap: optional
+    if (oldViewProps == nullptr
+          ? newViewProps.onPoiTap.isProvided()
+          : !newViewProps.onPoiTap.hasSameValue(oldViewProps->onPoiTap)) {
+      swiftPart.setOnPoiTap(newViewProps.onPoiTap.get());
+    }
     // pinDragEnabled: optional
     if (oldViewProps == nullptr
           ? newViewProps.pinDragEnabled.isProvided()
           : !newViewProps.pinDragEnabled.hasSameValue(oldViewProps->pinDragEnabled)) {
       swiftPart.setPinDragEnabled(newViewProps.pinDragEnabled.get());
+    }
+    // pinDragPreview: optional
+    if (oldViewProps == nullptr
+          ? newViewProps.pinDragPreview.isProvided()
+          : !newViewProps.pinDragPreview.hasSameValue(oldViewProps->pinDragPreview)) {
+      swiftPart.setPinDragPreview(newViewProps.pinDragPreview.get());
+    }
+    // dropRadius: optional
+    if (oldViewProps == nullptr
+          ? newViewProps.dropRadius.isProvided()
+          : !newViewProps.dropRadius.hasSameValue(oldViewProps->dropRadius)) {
+      swiftPart.setDropRadius(newViewProps.dropRadius.get());
     }
     // onDrag: optional
     if (oldViewProps == nullptr

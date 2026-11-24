@@ -21,29 +21,48 @@ final class HybridMapSurface: HybridMapSurfaceSpec {
   private var presenter: (any MapPresenter)?
   private var drag: MapDragGesture?
   private var currentProvider: MapProvider?
-  private var featuresDirty = true
+  private var optionsDirty = true
+  private var markersDirty = true
+  private var routesDirty = true
   private var hasFeatures = false
+  /// The initial camera read at presenter creation, until the first nonempty layout applies it.
+  private var pendingInitialCamera: InitialCameraRequest?
   private var signalledReady = false
   private var rendered = false
   private var signalledRendered = false
   private var dropped = false
   private var pendingSnapshots: [UUID: Promise<String>] = [:]
 
-  var features = MapFeatures(markers: [], routes: []) {
-    didSet { featuresDirty = true }
+  var markers: [MapMarker] = [] {
+    didSet { markersDirty = true }
+  }
+  var routes: [MapRoute] = [] {
+    didSet { routesDirty = true }
   }
   var provider: MapProvider = .apple
+  var options: MapOptions? {
+    didSet { optionsDirty = true }
+  }
+  var initialCamera: MapCamera?
+  var initialFit: InitialFit?
+  var onCameraMove: ((MapCameraEvent) -> Void)?
   var onReady: (() -> Void)?
   var onRendered: (() -> Void)?
   var onTap: ((MapTap) -> Void)?
+  var onPoiTap: ((MapPoiTap) -> Void)?
   var pinDragEnabled: Bool?
+  var pinDragPreview: DragPreview?
+  var dropRadius: Double?
   var onDrag: ((MapDragEvent) -> Void)?
   var view: UIView { host }
 
   override init() {
     super.init()
     host.windowChanged = { [weak self] in self?.updatePresentation() }
-    host.layoutChanged = { [weak self] in self?.signalReady() }
+    host.layoutChanged = { [weak self] in
+      self?.applyInitialCamera()
+      self?.signalReady()
+    }
   }
 
   func afterUpdate() { updatePresentation() }
@@ -62,10 +81,23 @@ final class HybridMapSurface: HybridMapSurfaceSpec {
         let drag = MapDragGesture(presenter: presenter)
         self.drag = drag
         drag.onDrag = { [weak self] event in self?.onDrag?(event) }
+        drag.onCamera = { [weak self, weak presenter] phase in
+          guard let self, let presenter, self.presenter === presenter, self.host.window != nil else { return }
+          self.onCameraMove?(MapCameraEvent(phase: phase, camera: presenter.camera))
+        }
+        if let initialFit {
+          pendingInitialCamera = .fit(initialFit)
+        } else if let initialCamera {
+          pendingInitialCamera = .camera(initialCamera)
+        }
         presenter.onRendered = { [weak self, weak presenter] in
           guard let self, self.presenter === presenter else { return }
           self.rendered = true
           self.signalReady()
+        }
+        presenter.onPOITap = { [weak self, weak presenter] event in
+          guard let self, self.presenter === presenter, self.host.window != nil, self.drag?.isActive != true else { return }
+          self.onPoiTap?(event)
         }
         drag.onTap = { [weak self, weak presenter] event in
           guard let self, self.presenter === presenter, self.host.window != nil else { return }
@@ -84,10 +116,25 @@ final class HybridMapSurface: HybridMapSurfaceSpec {
     }
 
     drag?.pinEnabled = pinDragEnabled == true
-    if featuresDirty, let presenter {
-      featuresDirty = false
-      drag?.updateRoutes(features.routes)
-      presenter.apply(features)
+    drag?.pinPreview = pinDragPreview
+    drag?.dropRadius = dropRadius ?? 0
+    presenter?.setPOITapsEnabled(onPoiTap != nil)
+    applyInitialCamera()
+    if let presenter {
+      if optionsDirty {
+        optionsDirty = false
+        presenter.apply(options)
+      }
+      if markersDirty {
+        markersDirty = false
+        presenter.applyMarkers(markers)
+        drag?.updateMarkers(markers)
+      }
+      if routesDirty {
+        routesDirty = false
+        drag?.updateRoutes(routes)
+        presenter.applyRoutes(routes)
+      }
       hasFeatures = true
     }
     signalReady()
@@ -102,8 +149,40 @@ final class HybridMapSurface: HybridMapSurfaceSpec {
     #endif
   }
 
+  private enum InitialCameraRequest {
+    case camera(MapCamera)
+    case fit(InitialFit)
+  }
+
+  /// Applies `initialFit` or `initialCamera` once the provider view has a size; `signalReady` waits for it.
+  private func applyInitialCamera() {
+    guard let request = pendingInitialCamera, let presenter, !presenter.view.bounds.isEmpty else { return }
+    pendingInitialCamera = nil
+    switch request {
+    case .camera(let camera):
+      presenter.moveCamera(camera.center.location, zoom: camera.zoom, duration: 0)
+    case .fit(let fit):
+      do {
+        let camera = try fitCamera(presenter, coordinates: fit.coordinates, padding: fit.padding, maxZoom: fit.maxZoom)
+        presenter.moveCamera(camera.center.location, zoom: camera.zoom, duration: 0)
+      } catch {
+        NSLog("MapSurface initialFit ignored: %@", error.localizedDescription)
+      }
+    }
+  }
+
+  private func fitCamera(
+    _ presenter: any MapPresenter, coordinates: [Coordinate], padding: EdgePadding?, maxZoom: Double?
+  ) throws -> MapCamera {
+    let size = presenter.view.bounds.size
+    return try CameraMath.fit(
+      CameraMath.bounds(coordinates), width: Double(size.width), height: Double(size.height),
+      padding: padding, maxZoom: maxZoom, currentZoom: presenter.camera.zoom
+    )
+  }
+
   private func signalReady() {
-    guard hasFeatures, let presenter, presenter.view.window != nil,
+    guard hasFeatures, pendingInitialCamera == nil, let presenter, presenter.view.window != nil,
           !presenter.view.bounds.isEmpty else { return }
     if !signalledReady, let onReady {
       signalledReady = true
@@ -118,8 +197,11 @@ final class HybridMapSurface: HybridMapSurfaceSpec {
   private func releasePresenter() {
     drag?.close()
     drag = nil
-    featuresDirty = true
+    optionsDirty = true
+    markersDirty = true
+    routesDirty = true
     hasFeatures = false
+    pendingInitialCamera = nil
     let snapshots = pendingSnapshots.values
     pendingSnapshots.removeAll()
     snapshots.forEach { $0.reject(withError: MapSurfaceError.detached) }
@@ -148,8 +230,11 @@ final class HybridMapSurface: HybridMapSurfaceSpec {
     onReady = nil
     onRendered = nil
     onTap = nil
+    onPoiTap = nil
     onDrag = nil
-    features = MapFeatures(markers: [], routes: [])
+    onCameraMove = nil
+    markers = []
+    routes = []
   }
 
   private func requirePresenter() throws -> any MapPresenter {
@@ -172,10 +257,63 @@ final class HybridMapSurface: HybridMapSurfaceSpec {
     return promise
   }
 
-  func setCamera(center: Coordinate, zoom: Double, animated: Bool) -> Promise<Void> {
+  func setCamera(center: Coordinate, zoom: Double, move: CameraMove?) -> Promise<Void> {
     withPresenter { [weak self] presenter in
+      try CameraMath.requireCoordinate(center)
+      try CameraMath.requireZoom(zoom)
+      let duration = try CameraMath.duration(move?.duration)
+      let target = try CameraMath.paddedCenter(center, zoom: zoom, padding: move?.padding)
       self?.drag?.cancel()
-      presenter.setCamera(center.location, zoom: zoom, animated: animated)
+      presenter.moveCamera(target.location, zoom: zoom, duration: duration)
+    }
+  }
+
+  func getCamera() -> Promise<MapCamera> {
+    withPresenter { $0.camera }
+  }
+
+  func fitCoordinates(coordinates: [Coordinate], fit: CameraFit?) -> Promise<Void> {
+    withPresenter { [weak self] presenter in
+      guard let self else { throw MapSurfaceError.detached }
+      let duration = try CameraMath.duration(fit?.duration)
+      let camera = try self.fitCamera(presenter, coordinates: coordinates, padding: fit?.padding, maxZoom: fit?.maxZoom)
+      self.drag?.cancel()
+      presenter.moveCamera(camera.center.location, zoom: camera.zoom, duration: duration)
+    }
+  }
+
+  func cameraFor(coordinates: [Coordinate], fit: CameraFit?) -> Promise<MapCamera> {
+    withPresenter { [weak self] presenter -> MapCamera in
+      guard let self else { throw MapSurfaceError.detached }
+      return try self.fitCamera(presenter, coordinates: coordinates, padding: fit?.padding, maxZoom: fit?.maxZoom)
+    }
+  }
+
+  func revealCoordinates(coordinates: [Coordinate], fit: CameraFit?) -> Promise<CameraReveal> {
+    withPresenter { [weak self] presenter -> CameraReveal in
+      guard let self else { throw MapSurfaceError.detached }
+      let duration = try CameraMath.duration(fit?.duration)
+      // Computed first so invalid input rejects before anything moves.
+      let target = try self.fitCamera(presenter, coordinates: coordinates, padding: fit?.padding, maxZoom: fit?.maxZoom)
+      let size = presenter.view.bounds.size
+      let points = coordinates.map { coordinate -> MapPoint in
+        let point = presenter.project(coordinate.location)
+        return MapPoint(x: Double(point.x), y: Double(point.y))
+      }
+      switch try CameraMath.reveal(points, width: Double(size.width), height: Double(size.height), padding: fit?.padding) {
+      case .none:
+        return .none
+      case .fit:
+        self.drag?.cancel()
+        presenter.moveCamera(target.center.location, zoom: target.zoom, duration: duration)
+        return .fit
+      case .pan(let dx, let dy):
+        let current = presenter.camera
+        let center = CameraMath.offset(current.center, zoom: current.zoom, dx: dx, dy: dy)
+        self.drag?.cancel()
+        presenter.moveCamera(center.location, zoom: current.zoom, duration: duration)
+        return .pan
+      }
     }
   }
 
@@ -188,6 +326,21 @@ final class HybridMapSurface: HybridMapSurfaceSpec {
 
   func unproject(point: MapPoint) -> Promise<Coordinate> {
     withPresenter { $0.unproject(CGPoint(x: point.x, y: point.y)).mapCoordinate }
+  }
+
+  func showCallout(markerId: String) -> Promise<Void> {
+    withPresenter { try $0.showCallout(markerId) }
+  }
+
+  func hideCallout() -> Promise<Void> {
+    withPresenter { $0.hideCallout() }
+  }
+
+  func queryFeatures(point: MapPoint, radius: Double) -> Promise<MapFeatureHits> {
+    withPresenter { [weak self] _ in
+      guard let drag = self?.drag else { throw MapSurfaceError.detached }
+      return try drag.queryFeatures(CGPoint(x: point.x, y: point.y), radius: radius)
+    }
   }
 
   func cancelDrag() -> Promise<Void> {

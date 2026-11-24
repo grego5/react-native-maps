@@ -32,13 +32,51 @@ abstract class HybridMapSurfaceSpec: HybridView() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var features: MapFeatures
+  abstract var markers: Array<MapMarker>
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var routes: Array<MapRoute>
   
   @get:DoNotStrip
   @get:Keep
   @set:DoNotStrip
   @set:Keep
   abstract var provider: MapProvider
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var options: MapOptions?
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var initialCamera: MapCamera?
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var initialFit: InitialFit?
+  
+  abstract var onCameraMove: ((event: MapCameraEvent) -> Unit)?
+  
+  private var onCameraMove_cxx: Func_void_MapCameraEvent?
+    @Keep
+    @DoNotStrip
+    get() {
+      return onCameraMove?.let { Func_void_MapCameraEvent_java(it) }
+    }
+    @Keep
+    @DoNotStrip
+    set(value) {
+      onCameraMove = value?.let { it }
+    }
   
   abstract var onReady: (() -> Unit)?
   
@@ -82,11 +120,37 @@ abstract class HybridMapSurfaceSpec: HybridView() {
       onTap = value?.let { it }
     }
   
+  abstract var onPoiTap: ((event: MapPoiTap) -> Unit)?
+  
+  private var onPoiTap_cxx: Func_void_MapPoiTap?
+    @Keep
+    @DoNotStrip
+    get() {
+      return onPoiTap?.let { Func_void_MapPoiTap_java(it) }
+    }
+    @Keep
+    @DoNotStrip
+    set(value) {
+      onPoiTap = value?.let { it }
+    }
+  
   @get:DoNotStrip
   @get:Keep
   @set:DoNotStrip
   @set:Keep
   abstract var pinDragEnabled: Boolean?
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var pinDragPreview: DragPreview?
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var dropRadius: Double?
   
   abstract var onDrag: ((event: MapDragEvent) -> Unit)?
   
@@ -105,7 +169,23 @@ abstract class HybridMapSurfaceSpec: HybridView() {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun setCamera(center: Coordinate, zoom: Double, animated: Boolean): Promise<Unit>
+  abstract fun setCamera(center: Coordinate, zoom: Double, move: CameraMove?): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getCamera(): Promise<MapCamera>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun fitCoordinates(coordinates: Array<Coordinate>, fit: CameraFit?): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun revealCoordinates(coordinates: Array<Coordinate>, fit: CameraFit?): Promise<CameraReveal>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun cameraFor(coordinates: Array<Coordinate>, fit: CameraFit?): Promise<MapCamera>
   
   @DoNotStrip
   @Keep
@@ -122,6 +202,18 @@ abstract class HybridMapSurfaceSpec: HybridView() {
   @DoNotStrip
   @Keep
   abstract fun cancelDrag(): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun queryFeatures(point: MapPoint, radius: Double): Promise<MapFeatureHits>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun showCallout(markerId: String): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun hideCallout(): Promise<Unit>
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {

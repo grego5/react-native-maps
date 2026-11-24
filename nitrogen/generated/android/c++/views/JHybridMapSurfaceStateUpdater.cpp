@@ -54,14 +54,39 @@ void JHybridMapSurfaceStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> 
 
   // Update only props that differ from the previous State snapshot.
   if (oldProps == nullptr
-        ? newProps->features.isProvided()
-        : !newProps->features.hasSameValue(oldProps->features)) {
-    hybridView->setFeatures(newProps->features.get());
+        ? newProps->markers.isProvided()
+        : !newProps->markers.hasSameValue(oldProps->markers)) {
+    hybridView->setMarkers(newProps->markers.get());
+  }
+  if (oldProps == nullptr
+        ? newProps->routes.isProvided()
+        : !newProps->routes.hasSameValue(oldProps->routes)) {
+    hybridView->setRoutes(newProps->routes.get());
   }
   if (oldProps == nullptr
         ? newProps->provider.isProvided()
         : !newProps->provider.hasSameValue(oldProps->provider)) {
     hybridView->setProvider(newProps->provider.get());
+  }
+  if (oldProps == nullptr
+        ? newProps->options.isProvided()
+        : !newProps->options.hasSameValue(oldProps->options)) {
+    hybridView->setOptions(newProps->options.get());
+  }
+  if (oldProps == nullptr
+        ? newProps->initialCamera.isProvided()
+        : !newProps->initialCamera.hasSameValue(oldProps->initialCamera)) {
+    hybridView->setInitialCamera(newProps->initialCamera.get());
+  }
+  if (oldProps == nullptr
+        ? newProps->initialFit.isProvided()
+        : !newProps->initialFit.hasSameValue(oldProps->initialFit)) {
+    hybridView->setInitialFit(newProps->initialFit.get());
+  }
+  if (oldProps == nullptr
+        ? newProps->onCameraMove.isProvided()
+        : !newProps->onCameraMove.hasSameValue(oldProps->onCameraMove)) {
+    hybridView->setOnCameraMove(newProps->onCameraMove.get());
   }
   if (oldProps == nullptr
         ? newProps->onReady.isProvided()
@@ -79,9 +104,24 @@ void JHybridMapSurfaceStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> 
     hybridView->setOnTap(newProps->onTap.get());
   }
   if (oldProps == nullptr
+        ? newProps->onPoiTap.isProvided()
+        : !newProps->onPoiTap.hasSameValue(oldProps->onPoiTap)) {
+    hybridView->setOnPoiTap(newProps->onPoiTap.get());
+  }
+  if (oldProps == nullptr
         ? newProps->pinDragEnabled.isProvided()
         : !newProps->pinDragEnabled.hasSameValue(oldProps->pinDragEnabled)) {
     hybridView->setPinDragEnabled(newProps->pinDragEnabled.get());
+  }
+  if (oldProps == nullptr
+        ? newProps->pinDragPreview.isProvided()
+        : !newProps->pinDragPreview.hasSameValue(oldProps->pinDragPreview)) {
+    hybridView->setPinDragPreview(newProps->pinDragPreview.get());
+  }
+  if (oldProps == nullptr
+        ? newProps->dropRadius.isProvided()
+        : !newProps->dropRadius.hasSameValue(oldProps->dropRadius)) {
+    hybridView->setDropRadius(newProps->dropRadius.get());
   }
   if (oldProps == nullptr
         ? newProps->onDrag.isProvided()

@@ -71,6 +71,15 @@ internal object MarkerImages {
         val input = context.contentResolver.openInputStream(uri) ?: throw FileNotFoundException(key.uri)
         input.use(::readImage)
       }
+      // Release builds resolve `require()` assets to bare resource names. Raw bytes keep density
+      // buckets from rescaling the bitmap; `key.scale` already describes the chosen bucket.
+      null -> {
+        val resources = context.resources
+        val id = resources.getIdentifier(key.uri, "drawable", context.packageName)
+          .takeIf { it != 0 } ?: resources.getIdentifier(key.uri, "raw", context.packageName)
+        if (id == 0) throw FileNotFoundException(key.uri)
+        resources.openRawResource(id).use(::readImage)
+      }
       else -> throw IllegalArgumentException("Unsupported marker image URI scheme")
     }
 

@@ -11,7 +11,15 @@
 #include "RouteDrag.hpp"
 
 #include "Coordinate.hpp"
+#include "DragPreview.hpp"
 #include "JCoordinate.hpp"
+#include "JDragPreview.hpp"
+#include "JMapPoint.hpp"
+#include "JMarkerImage.hpp"
+#include "MapPoint.hpp"
+#include "MarkerImage.hpp"
+#include <optional>
+#include <string>
 #include <vector>
 
 namespace margelo::nitro::mapssession {
@@ -35,6 +43,8 @@ namespace margelo::nitro::mapssession {
       static const auto clazz = javaClassStatic();
       static const auto fieldAnchors = clazz->getField<jni::JArrayClass<JCoordinate>>("anchors");
       jni::local_ref<jni::JArrayClass<JCoordinate>> anchors = this->getFieldValue(fieldAnchors);
+      static const auto fieldPreview = clazz->getField<JDragPreview>("preview");
+      jni::local_ref<JDragPreview> preview = this->getFieldValue(fieldPreview);
       return RouteDrag(
         [&](auto&& __input) {
           size_t __size = __input->size();
@@ -45,7 +55,8 @@ namespace margelo::nitro::mapssession {
             __vector.push_back(__element->toCpp());
           }
           return __vector;
-        }(anchors)
+        }(anchors),
+        preview != nullptr ? std::make_optional(preview->toCpp()) : std::nullopt
       );
     }
 
@@ -55,7 +66,7 @@ namespace margelo::nitro::mapssession {
      */
     [[maybe_unused]]
     static jni::local_ref<JRouteDrag::javaobject> fromCpp(const RouteDrag& value) {
-      using JSignature = JRouteDrag(jni::alias_ref<jni::JArrayClass<JCoordinate>>);
+      using JSignature = JRouteDrag(jni::alias_ref<jni::JArrayClass<JCoordinate>>, jni::alias_ref<JDragPreview>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
@@ -69,7 +80,8 @@ namespace margelo::nitro::mapssession {
             __array->setElement(__i, *__elementJni);
           }
           return __array;
-        }(value.anchors)
+        }(value.anchors),
+        value.preview.has_value() ? JDragPreview::fromCpp(value.preview.value()) : nullptr
       );
     }
   };
