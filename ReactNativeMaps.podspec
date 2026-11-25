@@ -19,18 +19,19 @@ Pod::Spec.new do |s|
     'HEADER_SEARCH_PATHS' => '$(inherited) "$(PODS_TARGET_SRCROOT)/nitrogen/generated/shared/c++" "$(PODS_TARGET_SRCROOT)/nitrogen/generated/ios"'
   }
 
-  s.source_files = 'ios/*.swift'
   s.frameworks = ['UIKit', 'MapKit', 'CoreLocation']
   s.dependency 'React-Core'
   s.dependency 'React-Fabric/components/view'
 
   load File.join(__dir__, 'nitrogen/generated/ios/ReactNativeMaps+autolinking.rb')
-  add_nitrogen_files(s)
 
-  s.subspec 'Apple' do |_apple|
+  s.subspec 'Apple' do |apple|
+    apple.source_files = 'ios/*.swift'
+    add_nitrogen_files(apple)
   end
 
   s.subspec 'Google' do |google|
+    google.dependency 'ReactNativeMaps/Apple'
     google.dependency 'GoogleMaps', '9.4.0'
     google.pod_target_xcconfig = {
       'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => '$(inherited) REACT_NATIVE_MAPS_GOOGLE',

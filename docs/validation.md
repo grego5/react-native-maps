@@ -31,6 +31,8 @@ The runner compiles and runs the sources in [`lab/test/`](../lab/test/). It writ
 
 With the example dependencies installed, set `GOOGLE_MAPS_ANDROID_API_KEY` in the build environment and run `npm run android` from `example/`. The example exercises marker prop updates, surface detach and reattach, projection, and snapshots.
 
+Start Metro separately with `npm run start` or `npm run starte` (LAN), both on port 8088. Use `npm run android:emulator` for an x86_64 emulator, or `npm run android:release` to assemble an ARM64 release APK. The debug commands install to a matching online device when available. Pass `-- -Device SERIAL` to select a device. With the map open, `npm run android:lifecycle` checks that the process survives backgrounding and resuming. Verify the map still responds on the device.
+
 [`lab/android-check/`](../lab/android-check/) is an optional Gradle harness that includes the library and Nitro dependency directly. It checks library compilation without installing or launching the example. It depends on the local Android toolchain and the root React Native Gradle plugin dependency.
 
 The camera math has JVM unit tests in `android/src/test/`. Run them through the example project after refreshing the installed package:
@@ -44,13 +46,13 @@ The `lab/android-check` harness does not run them: its Android Gradle plugin nee
 
 ## iOS
 
-On a Mac, install the example dependencies and run `npm run ios` from `example/` for MapKit. For a Google-enabled build, set `GOOGLE_MAPS_IOS_API_KEY` before Expo prebuild and CocoaPods installation. Rebuild the app after changing the native provider configuration. The Google-enabled app exposes a provider switch.
+On a Mac, install the example dependencies and run `npm run ios` from `example/` for MapKit. For a Google-enabled build, set `GOOGLE_MAPS_IOS_API_KEY` before Expo prebuild and CocoaPods installation. Rebuild the app after changing the native provider configuration. The Google-enabled app starts on Google Maps and exposes a provider switch. Set `EXPO_PUBLIC_PROVIDER=apple` when bundling to start with MapKit instead.
 
 ## Runtime checks
 
 For a change that affects the surface or interaction, check the relevant provider for readiness and rendering, marker and route taps, projection and snapshots, and detach and reattach. For gesture changes, also check normal panning, route and standalone pin drag, interruption by camera movement or another finger, and a normal tap immediately after cancellation.
 
-The example groups its controls into Surface, Options, Camera, Markers, Routes, Hits, and Events sections. Work through this checklist per provider. G-A is Google Maps on Android, G-i is Google Maps on iOS, and MK is MapKit.
+Open **Test controls** for Surface, Options, Camera, Markers, Routes, Hits, and Events. Work through this checklist per provider. G-A is Google Maps on Android, G-i is Google Maps on iOS, and MK is MapKit.
 
 **Options**
 - [ ] Hide POIs removes POI labels and Show POIs restores them (G-A, G-i; MapKit ignores `mapStyle`).

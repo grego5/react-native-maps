@@ -4,25 +4,42 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "start": "expo start --dev-client",
-    "android": "expo run:android",
+    "start": "expo start --dev-client --port 8088",
+    "starte": "expo start --dev-client --host lan --port 8088",
+    "ios:prebuild": "expo prebuild --platform ios --no-install",
     "ios": "expo run:ios",
+    "android:prebuild": "expo prebuild --platform android --no-install",
+    "android:clean": "expo prebuild --platform android --clean --no-install",
+    "android": "pwsh -NoProfile -File ../tools/android.ps1",
+    "android:release": "pwsh -NoProfile -File ../tools/android.ps1 -Release",
+    "android:emulator": "pwsh -NoProfile -File ../tools/android.ps1 -Emulator",
+    "android:lifecycle": "pwsh -NoProfile -File ../tools/android-lifecycle.ps1",
     "typecheck": "tsc --noEmit"
+  },
+  "expo": {
+    "install": {
+      "exclude": [
+        "typescript",
+        "react-native-maps"
+      ]
+    }
   },
   "overrides": {
     "minimatch": "11.0.8"
   },
   "dependencies": {
     "expo": "~58.0.26",
+    "expo-build-properties": "~58.0.12",
+    "expo-constants": "~58.0.16",
+    "expo-dev-client": "~58.0.21",
     "react": "19.3.0",
     "react-native": "0.88.1",
-    "react-native-nitro-modules": "0.37.2",
     "react-native-maps": "file:..",
-    "expo-constants": "~58.0.16"
+    "react-native-nitro-modules": "0.37.2",
+    "react-native-safe-area-context": "~5.11.1"
   },
   "devDependencies": {
     "@types/react": "19.3.0",
     "typescript": "npm:@typescript/typescript6@^6.0.2"
   }
 }
-

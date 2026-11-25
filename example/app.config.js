@@ -5,10 +5,14 @@ module.exports = {
   slug: 'react-native-maps-example',
   android: {
     package: 'com.maps.example',
+    scheme: 'com.maps.example',
     config: { googleMaps: { apiKey: process.env.GOOGLE_MAPS_ANDROID_API_KEY } },
   },
   ios: { bundleIdentifier: 'com.maps.example' },
-  plugins: [['react-native-maps', { iosGoogleMapsApiKey: googleIOSKey }]],
+  plugins: [
+    ['react-native-maps', { iosGoogleMapsApiKey: googleIOSKey }],
+    ['expo-build-properties', { android: { cmakeVersion: '4.1.2' } }],
+  ],
   extra: {
     googleIOS: Boolean(googleIOSKey),
     eas: {
@@ -16,4 +20,3 @@ module.exports = {
     },
   },
 };
-
